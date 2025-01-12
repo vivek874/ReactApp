@@ -1,23 +1,40 @@
-function ListGroup() {
-  const items = ["kathmandu", "delhi", "tokyo"];
+import { useState } from "react"; 
 
-  //a function
-  const getMessage = () => {
-    return items.length === 0 ? <p>no items</p> : null;
-  };
+// use interface to use same component for multiple data passing
+// input passed to component is props
+// data managed by a component is state
+
+interface Props{
+  items: string[];
+  heading: string;
+  onSelectItem: (item: string) =>  void;
+}
+
+
+function ListGroup({items,heading,onSelectItem}: Props) {
+
+
+  // [variable , function] = initially nth selected
+  const [selectedIndex, setSelectedIndex] = useState(-1);
 
   return (
     <>
-      <h1>List</h1>
-      {getMessage()}
+      <h1>{heading}</h1>
       <ul className="list-group">
-        {items.map((item) => (
+        {items.map((item, index) => (
           <li
-            className="list-group-item"
+            className={
+              selectedIndex === index
+                ? "list-group-item active"
+                : "list-group-item"
+            }
             key={item} //need key so that react knows what item when dynamically updating
-            onClick={() => console.log(item)}
+            onClick={() => {
+              setSelectedIndex(index);
+              onSelectItem(item);
+            }}
           >
-            {item}{" "}
+            {item}
           </li>
         ))}
       </ul>
