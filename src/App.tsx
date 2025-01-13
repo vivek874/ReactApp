@@ -1,6 +1,8 @@
+import { useState } from "react";
 import Alert from "./components/Alert";
 import ListGroup from "./components/ListGroup";
 import Button from "./components/button";
+
 
 function App() {
   const items = ["kathmandu", "manang"];
@@ -10,31 +12,37 @@ function App() {
   };
 
   const handleSave = () => {
-    alert('save clicked')
-  }
+    alert("ojaswee is gay");
+  };
+
+  const [showAlert, setShowAlert] = useState(false);
  
-  const handleDelete = () => {
-    alert('delete clicked')
-  }
 
   return (
     <div>
-      <Alert>
-        hello<h1>world</h1>
-      </Alert>
+    
       <ListGroup
         items={items}
         heading="cities"
         onSelectItem={handleSelectItem}
       ></ListGroup>
 
-      <Button onClick={handleSave} >
-        save
-      </Button>
-      <Button onClick={handleDelete} className="btn-danger">
-        delete
+      <Button onClick={handleSave}>save </Button>
+
+      {/* Alert component will be rendered only if showAlert is true */}
+      {showAlert && <Alert>
+
+        <button type="button" className="btn-close"  aria-label="Close" onClick={()=>{(setShowAlert(false))}}> </button>
+
+        alert</Alert>}   
+
+      <Button  onClick={()=>{setShowAlert(true)}} >
+        click for alert
       </Button>
 
+     
+
+     
     </div>
   );
 }
