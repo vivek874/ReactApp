@@ -1,0 +1,19 @@
+.nav-item{
+  margin-right: 50px;
+}
+
+.card{
+   background-color: beige;
+   margin-bottom: 20px;
+}
+
+.list-group {
+  margin-bottom: 20px;
+  margin-left: 10px;
+
+}
+
+.btn{
+  margin-right: 20px;
+  margin-left: 10px;
+}

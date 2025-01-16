@@ -19,7 +19,7 @@ function ListGroup({items,heading,onSelectItem}: Props) {
 
   return (
     <>
-      <h1>{heading}</h1>
+      <h1 className="list-group">{heading}</h1>
       <ul className="list-group">
         {items.map((item, index) => (
           <li

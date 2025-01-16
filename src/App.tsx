@@ -2,6 +2,8 @@ import { useState } from "react";
 import Alert from "./components/Alert";
 import ListGroup from "./components/ListGroup";
 import Button from "./components/button";
+import Navbar from "./components/Navbar";
+import './app.css';
 
 
 function App() {
@@ -17,13 +19,21 @@ function App() {
 
   const [showAlert, setShowAlert] = useState(false);
  
-
+  const [navItems]= useState([
+    {label: 'Home' ,href:'#' ,isActive:true },    // to navigate to new page, update the href
+    {label: 'Products' , href:'#', isDisabled:true},  
+    {label: 'Contact' ,href:'#', isDisabled:true}
+  ])
   return (
     <div>
-    
+       <Navbar  navItems={navItems}>
+
+       </Navbar>
+      
+
       <ListGroup
         items={items}
-        heading="cities"
+        heading="Cities"
         onSelectItem={handleSelectItem}
       ></ListGroup>
 
