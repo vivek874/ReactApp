@@ -1,59 +1,32 @@
-import { useState } from "react";
-import Alert from "./components/Alert";
-import ListGroup from "./components/ListGroup";
-import Button from "./components/button";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
-import './app.css';
+import Home from "./pages/Home";
+import Academics from "./pages/Academics";
+import Employee from "./pages/Employee";
+import { useState } from "react";
+import "./App.css";
 
 
 function App() {
-  const items = ["kathmandu", "manang"];
+    const [navItems] = useState([
+        { label: "Home", isActive: true, href: "/home" },
+        { label: "Academics", isActive: false, href: "/academics" },
+        { label: "Employee", isActive:false, href:"/employee"}
+    ]);
 
-  const handleSelectItem = (item: string) => {
-    console.log(item);
-  };
+    return (
+        <Router>
+            <Navbar navItems={navItems} ></Navbar>
 
-  const handleSave = () => {
-    alert("ojaswee is gay");
-  };
+            <Routes>
+                <Route path="/home" element={<Home />} />
+                <Route path="/academics" element={<Academics />} />
+                <Route path="/employee"  element={<Employee />} />
+            </Routes>
 
-  const [showAlert, setShowAlert] = useState(false);
- 
-  const [navItems]= useState([
-    {label: 'Home' ,href:'#' ,isActive:true },    // to navigate to new page, update the href
-    {label: 'Products' , href:'#', isDisabled:true},  
-    {label: 'Contact' ,href:'#', isDisabled:true}
-  ])
-  return (
-    <div>
-       <Navbar  navItems={navItems}>
-
-       </Navbar>
-      
-
-      <ListGroup
-        items={items}
-        heading="Cities"
-        onSelectItem={handleSelectItem}
-      ></ListGroup>
-
-      <Button onClick={handleSave}>save </Button>
-
-      {/* Alert component will be rendered only if showAlert is true */}
-      {showAlert && <Alert>
-
-        <button type="button" className="btn-close"  aria-label="Close" onClick={()=>{(setShowAlert(false))}}> </button>
-
-        alert</Alert>}   
-
-      <Button  onClick={()=>{setShowAlert(true)}} >
-        click for alert
-      </Button>
-
-     
-
-     
-    </div>
-  );
+        </Router>
+    );
 }
+
+
 export default App;
