@@ -17,6 +17,19 @@
 .btn{
   margin-right: 20px;
   margin-left: 10px;
-}.nav-link{
-  /* background-color: white; */
 }
+
+.nav-link:hover,
+.nav-link:focus{
+
+  background-color: white; /* Light gray on hover */
+  color: black; /* Blue text */
+}
+
+.nav-link {
+  color: #000; /* Set to black or any preferred color */
+}
+
+  
+
+  

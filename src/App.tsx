@@ -9,7 +9,7 @@ import "./App.css";
 
 function App() {
     const [navItems] = useState([
-        { label: "Home", isActive: true, href: "/home" },
+        { label: "Home", isActive: false, href: "/" },
         { label: "Academics", isActive: false, href: "/academics" },
         { label: "Employee", isActive:false, href:"/employee"}
     ]);
@@ -19,7 +19,7 @@ function App() {
             <Navbar navItems={navItems} ></Navbar>
 
             <Routes>
-                <Route path="/home" element={<Home />} />
+                <Route path="/" element={<Home />} />
                 <Route path="/academics" element={<Academics />} />
                 <Route path="/employee"  element={<Employee />} />
             </Routes>

@@ -6,8 +6,8 @@ import { useState } from "react";
 
 interface Props{
   items: string[];
-  heading: string;
-  onSelectItem: (item: string) =>  void;
+  heading?: string;
+  onSelectItem?: (item: string) =>  void;
 }
 
 
@@ -31,7 +31,7 @@ function ListGroup({items,heading,onSelectItem}: Props) {
             key={item} //need key so that react knows what item when dynamically updating
             onClick={() => {
               setSelectedIndex(index);
-              onSelectItem(item);
+              onSelectItem?.(item);
             }}
           >
             {item}

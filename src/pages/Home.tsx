@@ -4,7 +4,7 @@ import Button from "../components/button";
 import Alert from "../components/Alert";
 
 const Home = () => {
-    const items = ["kathmandu", "manang"];
+    const items = ["abc", "def"];
     const [showAlert, setShowAlert] = useState(false);
 
     const handleSelectItem = (item: string) => {
@@ -19,7 +19,7 @@ const Home = () => {
         <div>
             <ListGroup
                 items={items}
-                heading="Cities"
+                heading="Topic"
                 onSelectItem={handleSelectItem}
             />
             <Button onClick={handleSave}>save</Button>
