@@ -109,8 +109,8 @@ const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
               <label htmlFor="Subject" className="form-label">
                 Subject
               </label>
-              <input
-                type="text"
+              <select
+               
                 className="form-control"
                 id="Subject"
                 name="Subject"
@@ -118,7 +118,17 @@ const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
                 onChange={handleChange}
               
                 required
-              />
+              >
+              <option> </option>
+              <option value="Nepali" >Nepali</option>
+              <option value="English">English</option>
+              <option value="Maths"> Maths</option>
+              <option value="Science">Science</option>
+              <option value="Health">Health</option>
+              <option value="Computer">Computer</option>
+              <option value="Social">Social</option>
+                </select>
+            
             </div>
 
            

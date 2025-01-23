@@ -4,7 +4,7 @@
 }
 
 .card{
-   background-color: beige;
+   background-color: white;
    margin-bottom: 20px;
 }
 
@@ -22,7 +22,7 @@
 .nav-link:hover,
 .nav-link:focus{
 
-  background-color: white; /* Light gray on hover */
+  background-color: lightgray; /* Light gray on hover */
   color: black; /* Blue text */
 }
 
