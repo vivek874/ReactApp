@@ -30,6 +30,11 @@
   color: #000; /* Set to black or any preferred color */
 }
 
+.center_login{
+  margin-top: 180px;
+}
   
-
-  
+#logout{
+  position: absolute;
+  right: 0;
+}

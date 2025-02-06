@@ -1,61 +1,46 @@
-import { useState } from "react";
-
-
+import { NavLink } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
+import { useContext } from "react";
 
 interface NavItem {
-    label: string;
-    href?: string;
-    isActive?: boolean;
-    isDisabled?: boolean;
-  }
-  
-  interface NavbarProps {
-    navItems: NavItem[];
-   
-  }
-const Navbar = ({navItems}: NavbarProps) => {
+  label: string;
+  href: string;
+  isDisabled?: boolean;
+}
 
-  const [items,setItems]=useState(navItems);
+interface NavbarProps {
+  navItems: NavItem[];
+}
 
-  const handleItemClick = (index: number) => {
-    setItems((prevItems) =>
-      prevItems.map((item, i) => ({
-        ...item, // Copy all properties of the current item
-        isActive: i === index, // Set clicked item as active
-      }))
-    );
-  };
-
-  
+const Navbar = ({ navItems }: NavbarProps) => {
+  const auth = useContext(AuthContext);
   return (
     <div className="card text-center">
-    <div className="card-header">
-      <ul className="nav nav-tabs card-header-tabs">
-
-      {items.map((item, index) => (
-            <li className="nav-item" key={index} >
-              <a
-
-                className={`nav-link ${
-                  item.isActive ? "active" : ""
-                } ${item.isDisabled ? "disabled" : ""}`}
-                href={item.href || "#"}
-                aria-current={item.isActive ? "true" : undefined}
-                onClick={() => handleItemClick(index)}
-               
-                
-              >
-                {item.label}
-              </a>
+      <div className="card-header">
+        <ul className="nav nav-tabs card-header-tabs">
+          {navItems.map((item, index) => (
+            <li className="nav-item" key={index}>
+              {!item.isDisabled ? (
+                <NavLink
+                  to={item.href}
+                  className={({ isActive }) => `nav-link ${isActive ? "active" : ""}`}
+                  aria-current="page"
+                >
+                  {item.label}
+                </NavLink>
+              ) : (
+                <span className="nav-link disabled">{item.label}</span>
+              )}
             </li>
+            
           ))}
-
-
-      </ul>
+          <li>
+                    <button type='button' className="btn btn-secondary" id='logout'onClick={auth?.logout}>Logout</button>
+                </li>
+        </ul>
+      </div>
     </div>
-   
-  </div>
-  )
-}
+  );
+};
 
 export default Navbar;

@@ -4,7 +4,7 @@ import Button from "../components/button";
 import Alert from "../components/Alert";
 
 const Home = () => {
-    const items = ["abc", "def"];
+    const items = ["daily routine", "leave notices"];
     const [showAlert, setShowAlert] = useState(false);
 
     const handleSelectItem = (item: string) => {
@@ -17,9 +17,10 @@ const Home = () => {
 
     return (
         <div>
+            
             <ListGroup
                 items={items}
-                heading="Topic"
+                heading="Dashboard"
                 onSelectItem={handleSelectItem}
             />
             <Button onClick={handleSave}>save</Button>
@@ -36,7 +37,7 @@ const Home = () => {
                 </Alert>
             )}
 
-            <Button onClick={() => setShowAlert(true)}>click for alert</Button>
+            <Button onClick={() => setShowAlert(true)}> alert</Button>
         </div>
     );
 };
