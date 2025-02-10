@@ -4,15 +4,17 @@ import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
 import Academics from "./pages/Academics";
 import Employee from "./pages/Employee";
-import Login from "./pages/Login"; // Import Login
-// import Admin from "./pages/Admin";
+import Login from "./pages/Login"; 
+import Admin from "./pages/Admin";
+import Student from "./pages/Student";
+
 import { AuthProvider, AuthContext } from "./context/AuthContext";
 import "./App.css";
 
 function AppContent() {
     const auth = useContext(AuthContext);
 
-    // If user is not logged in, redirect to login page
+   
     if (!auth?.userRole) {
         return <Login />;
     }
@@ -25,24 +27,31 @@ function AppContent() {
 
   
     return (
-        <Router>
-            <Navbar navItems={navItems} />
-            <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/academics" element={<Academics />} />
-                <Route path="/employee" element={<Employee />} />
-                {/* <Route path="/admin" element={auth.userRole === "admin" ? <Admin /> : <Navigate to="/" />} /> */}
+      
+            <>
+                <Navbar navItems={navItems} />
+                <Routes>
                
-                <Route path="*" element={<Navigate to="/" />} />
-            </Routes>
-        </Router>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/academics" element={<Academics />} />
+                    <Route path="/employee" element={<Employee />} />
+                
+                    {auth.userRole === "admin" && <Route path="/admin" element={<Admin />} />}
+                    {auth.userRole === "student" && <Route path="/student" element={<Student />} />}
+
+                    <Route path="*" element={<Navigate to="/" />} />
+                </Routes>
+            </>
+       
     );
 }
 
 function App() {
     return (
         <AuthProvider>
-            <AppContent />
+            <Router>
+                <AppContent />
+            </Router>
         </AuthProvider>
     );
 }

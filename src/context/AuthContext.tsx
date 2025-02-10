@@ -10,18 +10,16 @@ export const AuthContext = createContext<AuthContextType | undefined>(
 );
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [userRole, setUserRole] = useState<string | null>(
-    localStorage.getItem("userRole")
-  );
+  const [userRole, setUserRole] = useState<string | null>(null)
   
   const login = (role: string) => {
     setUserRole(role);
-    localStorage.setItem("userRole", role);
+  
   };
 
   const logout = () => {
     setUserRole(null);
-    localStorage.removeItem("userRole");
+   
   };
   return (
     <AuthContext.Provider value={{ userRole, login, logout }}>

@@ -1,34 +1,33 @@
 import { useContext, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
-// import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const auth = useContext(AuthContext);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("");
-
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const handleLogin = () => {
-    
-    if (username.trim() === "u" && password.trim()==='p') { // Check username
-      auth?.login(username); // Set user role in context
-     
-
-      // Redirect based on role
-    //   if (role === "admin") {
-    //     navigate("/admin"); // Redirect to Admin Panel
-    //   } else {
-    //     navigate("/"); // Redirect to Home for other roles
-    //   }
-    // } else {
-    //   alert("Invalid username! Use 'user123'");
-    }else{
-      alert('invalid credentials')
+    console.log("Selected Role:", role);
+    if (!role) {
+      // Ensure role is selected
+      alert("Please select a role");
+      return;
     }
-
-    
+    if (username.trim() === "u" && password.trim() === "p") {
+      auth?.login(role); // Set user role
+      if (role === "admin") {
+        navigate("/admin"); // Redirect to admin page
+      } else if (role === "teacher") {
+        navigate("/"); // Redirect to teacher page (if needed)
+      } else if (role==='student') {
+        navigate("/student"); 
+      }
+    } else {
+      alert("Invalid credentials");
+    }
   };
 
   return (
@@ -59,12 +58,12 @@ const Login = () => {
             value={role}
             onChange={(e) => setRole(e.target.value)}
           >
+            <option value=""></option>
             <option value="teacher">teacher</option>
             <option value="admin">admin</option>
             <option value="student">student</option>
           </select>
         </div>
-      
 
         <button onClick={handleLogin}>Login</button>
       </div>
