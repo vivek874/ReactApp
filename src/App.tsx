@@ -1,56 +1,44 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import { useContext } from "react";
+import { BrowserRouter as Router, Routes, Route,Navigate } from "react-router-dom";
+import { AuthProvider } from "./context/AuthContext";
 import Navbar from "./components/Navbar";
+import Login from "./pages/Login";
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import ManageUsers from "./pages/admin/ManageUsers";
+import Reports from "./pages/admin/Reports";
 import Home from "./pages/Home";
 import Academics from "./pages/Academics";
 import Employee from "./pages/Employee";
-import Login from "./pages/Login"; 
-import Admin from "./pages/Admin";
-import Student from "./pages/Student";
-
-import { AuthProvider, AuthContext } from "./context/AuthContext";
+import StudentDashboard from "./pages/student/StudentDashboard";
 import "./App.css";
 
-function AppContent() {
-    const auth = useContext(AuthContext);
-
-   
-    if (!auth?.userRole) {
-        return <Login />;
-    }
-
-    const navItems = [
-        { label: "Home", href: "/" },
-        { label: "Academics", href: "/academics" },
-        { label: "Employee", href: "/employee" }
-    ];
-
-  
-    return (
-      
-            <>
-                <Navbar navItems={navItems} />
-                <Routes>
-               
-                    <Route path="/" element={<Home />} />
-                    <Route path="/academics" element={<Academics />} />
-                    <Route path="/employee" element={<Employee />} />
-                
-                    {auth.userRole === "admin" && <Route path="/admin" element={<Admin />} />}
-                    {auth.userRole === "student" && <Route path="/student" element={<Student />} />}
-
-                    <Route path="*" element={<Navigate to="/" />} />
-                </Routes>
-            </>
-       
-    );
-}
 
 function App() {
+ 
     return (
         <AuthProvider>
             <Router>
-                <AppContent />
+                <Navbar /> 
+                <Routes>
+                    {/* Common Routes */}
+                  
+                    <Route path="/login"  element={<Login />} />
+                    <Route path="/"  element={<Login />} />
+               
+
+                    {/* Admin Routes */}
+                    <Route path="/admin/dashboard" element={<AdminDashboard />} />
+                    <Route path="/admin/manage-users" element={<ManageUsers />} />
+                    <Route path="/admin/reports" element={<Reports />} />
+
+                    {/* Teacher Routes */}
+                    <Route path="/pages/home" element={<Home />} />
+                    <Route path="/pages/academics" element={<Academics />} />
+                    <Route path="/pages/employee" element={<Employee />} />
+
+                    {/* Student Routes */}
+                    <Route path="/student/dashboard" element={<StudentDashboard />} />
+                    <Route path="*" element={<Navigate to="/" />} />
+                </Routes>
             </Router>
         </AuthProvider>
     );
