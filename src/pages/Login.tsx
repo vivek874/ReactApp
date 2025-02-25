@@ -1,6 +1,7 @@
 import { useContext, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Login = () => {
   const auth = useContext(AuthContext);
@@ -9,7 +10,7 @@ const Login = () => {
   const [role, setRole] = useState("");
   const navigate = useNavigate();
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
   
     if (!role) {
     
@@ -17,19 +18,32 @@ const Login = () => {
       return;
     }
 
-    if (username.trim() === "u" && password.trim() === "p") {
-      auth?.login(role); // Set user role
-
-      if (role === "admin") {
-        navigate("/admin/dashboard"); 
-      } else if (role === "teacher") {
-        navigate("/pages/home"); 
-      } else if (role==='student') {
-        navigate("/student/dashboard"); 
+  
+      try {
+        const response = await axios.post("http://127.0.0.1:8000/login/", {
+          username,
+          password,
+          role,
+         
+         
+        });
+    
+        if (response.data.username === username  && response.data.role === role ) {
+  
+          auth?.login(role);
+          navigate(
+            role === "admin" ? "/admin/dashboard" 
+            : role === "student" ? "/student/dashboard" 
+            : "/pages/home"
+          );
+          
+        } else {
+          alert("Unauthorized user");
+        }
+      } catch (error) {
+        console.error("Login error:", error);
+        alert("Invalid credentials");
       }
-    } else {
-      alert("Invalid credentials");
-    }
 
     
   };
@@ -60,6 +74,7 @@ const Login = () => {
           </div>
           <div className="mb-3">
             <select
+          
               className="form-label"
               value={role}
               onChange={(e) => setRole(e.target.value)}
