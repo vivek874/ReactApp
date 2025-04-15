@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 interface User {
-
   username: string;
   role: string;
 }
@@ -54,7 +53,7 @@ const AdminManageUsers = () => {
     if (window.confirm(`Are you sure you want to delete ${username}?`)) {
       try {
         await axios.delete(`http://127.0.0.1:8000/delete-user/${username}/`);
-        setUsers(users.filter(user => user.username !== username)); // Update UI
+        setUsers(users.filter((user) => user.username !== username)); // Update UI
         alert("User deleted successfully");
       } catch (error) {
         console.error("Error deleting user:", error);
@@ -65,8 +64,6 @@ const AdminManageUsers = () => {
 
   return (
     <div className="admin">
-    
-
       {/* User Creation Form */}
       <div>
         <h3>Create New User</h3>
@@ -76,17 +73,17 @@ const AdminManageUsers = () => {
           value={username}
           onChange={(e) => setUsername(e.target.value)}
         />
-       <p></p>
+        <p></p>
         <input
           type="password"
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-         <p></p>
+        <p></p>
         <select value={role} onChange={(e) => setRole(e.target.value)}>
           <option value="">Select Role</option>
-        
+
           <option value="teacher">Teacher</option>
           <option value="student">Student</option>
         </select>
@@ -94,14 +91,16 @@ const AdminManageUsers = () => {
         <button onClick={handleCreateUser}>Create User</button>
       </div>
       <p></p>
-      {/* User List */}
+
       <h3>Existing Users</h3>
       <ul>
         {users.map((user) => (
-          <li key={user.username}>{user.username} ({user.role})
-          <button onClick={() => handleDeleteUser(user.username)}>Delete</button>
+          <li key={user.username}>
+            {user.username} ({user.role})
+            <button onClick={() => handleDeleteUser(user.username)}>
+              Delete
+            </button>
           </li>
-          
         ))}
       </ul>
     </div>

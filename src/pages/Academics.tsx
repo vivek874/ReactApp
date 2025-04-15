@@ -2,12 +2,16 @@ import ListGroup from "../components/ListGroup";
 import AssignMarks from "../components/AssignMarks";
 import Filter from "../components/Filter";
 import { useState } from "react";
+import StudentList from '../components/StudentList';
+
 
 const Academics = () => {
+
   const items = ["Assign Marks", "Assign Homework", "Attendance"];
 
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
 
+ 
   // for homework
   const fields = [
     {
@@ -67,6 +71,9 @@ const Academics = () => {
   };
   return (
     <>
+      <div>
+        <StudentList />
+      </div>
       <ListGroup items={items} onSelectItem={setSelectedOption} />
       <div className="content">
         {selectedOption === "Assign Marks" && <AssignMarks />}
