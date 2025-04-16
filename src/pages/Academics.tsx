@@ -2,7 +2,7 @@ import ListGroup from "../components/ListGroup";
 import AssignMarks from "../components/AssignMarks";
 import Filter from "../components/Filter";
 import { useState } from "react";
-import StudentList from '../components/StudentList';
+ import StudentList from '../components/StudentList';
 
 
 const Academics = () => {

@@ -1,10 +1,24 @@
 import { useState, FormEvent, ChangeEvent } from "react";
+import axios from "axios";
 
 interface FormField {
   name: string;
   label: string;
   type?: string;
   options?: string[];
+}
+
+interface Student {
+  id: number;
+  name: string;
+  age: number;
+  gender: string;
+  grade: number;
+  section: string;
+  attendance: number;
+  test_score: number;
+  homework_score: number;
+  final_score: number;
 }
 
 interface FormProp {
@@ -24,10 +38,26 @@ const Filter = ({ fields, initialValues, onSubmit }: FormProp) => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     onSubmit(formData);
+
+    try {
+      const response = await axios.get(`http://localhost:8000/api/students/`, {
+        params: {
+          grade: formData.Grade,
+          section: formData.Classroom,
+        },
+      });
+
+      setStudents(response.data);
+      console.log("Filtered students:", response.data);
+    } catch (error) {
+      console.error("Error fetching students:", error);
+    }
   };
+
+  const [students, setStudents] = useState<Student[]>([]);
 
   return (
     <div className="container mt-4">
@@ -64,7 +94,6 @@ const Filter = ({ fields, initialValues, onSubmit }: FormProp) => {
                         name={field.name}
                         value={formData[field.name]}
                         onChange={handleChange}
-                        
                       />
                     )}
                   </div>
@@ -75,6 +104,19 @@ const Filter = ({ fields, initialValues, onSubmit }: FormProp) => {
               </button>
             </div>
           </form>
+          {students.length > 0 && (
+            <div className="mt-4">
+              <h3>Filtered Students</h3>
+              <ul className="list-group">
+                {students.map((student, index) => (
+                  <li key={index} className="list-group-item">
+                    {student.name} - Grade {student.grade}, Section{" "}
+                    {student.section}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
       </div>
     </div>
