@@ -2,8 +2,8 @@ import { useState, FormEvent } from "react";
 import axios from "axios";
 
 interface MarkProp {
-  Year: string;
-  Exam: string;
+  // Year: string;
+  AssignTo: string;
   Grade: string;
   Section: string;
   Subject: string;
@@ -20,12 +20,13 @@ interface Student {
   test_score: number;
   homework_score: number;
   final_score: number;
+  aggregate: number;
 }
 
 const AssignMarks = () => {
   const [formData, setFormData] = useState<MarkProp>({
-    Year: "",
-    Exam: "",
+    // Year: "",
+    AssignTo: "",
     Grade: "",
     Section: "",
     Subject: "",
@@ -51,9 +52,8 @@ const AssignMarks = () => {
           section: formData.Section,
         },
       });
-
       setStudents(response.data);
-      console.log("Filtered students:", response.data);
+      // console.log("Filtered students:", response.data);
     } catch (error) {
       console.error("Error fetching students:", error);
     }
@@ -76,20 +76,19 @@ const AssignMarks = () => {
     );
   };
 
-  const handleSave = async (studentId: number) => {
-    const studentToUpdate = students.find((s) => s.id === studentId);
-    if (studentToUpdate) {
-      console.log("Sending updated data:", studentToUpdate);
-
-      try {
+  const handleSave = async () => {
+    try {
+      for (const student of students) {
+      
         const response = await axios.put(
-          `http://localhost:8000/api/students/${studentId}/`,
-          studentToUpdate
+          `http://localhost:8000/api/students/${student.id}/`,
+          student
         );
         console.log("Updated student:", response.data);
-      } catch (error) {
-        console.error("Error updating student:", error);
       }
+      alert("All students have been saved successfully!");
+    } catch (error) {
+      console.error("Error updating students:", error);
     }
   };
 
@@ -99,7 +98,8 @@ const AssignMarks = () => {
         <div className="col-md-8">
           <h2 className="mb-4">Apply Filter</h2>
           <form onSubmit={handleSubmit}>
-            <div className="mb-3">
+            
+            {/* <div className="mb-3">
               <label htmlFor="Year" className="form-label">
                 Year
               </label>
@@ -112,21 +112,25 @@ const AssignMarks = () => {
                 onChange={handleChange}
                 required
               />
-            </div>
+            </div> */}
 
             <div className="mb-3">
-              <label htmlFor="Exam" className="form-label">
-                Exam
+              <label htmlFor="AssignTo" className="form-label">
+                Assign To
               </label>
-              <input
-                type="text"
+              <select
                 className="form-control"
-                id="Exam"
-                name="Exam"
-                value={formData.Exam}
+                id="AssignTo"
+                name="AssignTo"
+                value={formData.AssignTo}
                 onChange={handleChange}
                 required
-              />
+              >
+                <option value="">-- Select Exam --</option>
+                <option value="test_score">Test Score</option>
+                <option value="homework_score">Homework</option>
+                <option value="final_exam">Final Exam</option>
+              </select>
             </div>
 
             <div className="mb-3">
@@ -201,8 +205,17 @@ const AssignMarks = () => {
                     <th>Name</th>
                     <th>Grade</th>
                     <th>Section</th>
-                    <th>Test Score</th>
-                    <th>Actions</th>
+                    <th>
+                      {formData.AssignTo === "test_score"
+                        ? "Test Score"
+                        : formData.AssignTo === "homework_score"
+                        ? "Homework Score"
+                        : formData.AssignTo === "final_exam"
+                        ? "Final Exam"
+                        : "Score"}
+                    </th>
+
+                  
                   </tr>
                 </thead>
                 <tbody>
@@ -214,24 +227,25 @@ const AssignMarks = () => {
                       <td>
                         <input
                           type="number"
-                          value={student.test_score}
+                          value={
+                            student[formData.AssignTo as keyof Student] ?? ""
+                          }
                           onChange={(e) =>
-                            handleScoreChange(e, student.id, "test_score")
+                            handleScoreChange(e, student.id, formData.AssignTo)
                           }
                         />
-                      </td>
-                      <td>
-                        <button
-                          className="btn btn-success btn-sm"
-                          onClick={() => handleSave(student.id)}
-                        >
-                          Save
-                        </button>
                       </td>
                     </tr>
                   ))}
                 </tbody>
               </table>
+
+              <button
+                className="btn btn-success btn-lg w-100"
+                onClick={handleSave}
+              >
+                Save all
+              </button>
             </div>
           )}
         </div>

@@ -12,6 +12,7 @@ interface Student {
   test_score: number;
   homeworkScore: number;
   finalScore: number;
+  aggregate: number;
 }
 
 const StudentList = () => {
