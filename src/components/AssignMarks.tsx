@@ -2,7 +2,7 @@ import { useState, FormEvent } from "react";
 import axios from "axios";
 
 interface MarkProp {
-  // Year: string;
+ 
   AssignTo: string;
   Grade: string;
   Section: string;
@@ -50,6 +50,7 @@ const AssignMarks = () => {
         params: {
           grade: formData.Grade,
           section: formData.Section,
+          
         },
       });
       setStudents(response.data);
@@ -79,18 +80,23 @@ const AssignMarks = () => {
   const handleSave = async () => {
     try {
       for (const student of students) {
-      
-        const response = await axios.put(
-          `http://localhost:8000/api/students/${student.id}/`,
-          student
-        );
-        console.log("Updated student:", response.data);
+        const score = student[formData.AssignTo as keyof Student];
+  
+        if (score !== undefined) {
+          await axios.post('http://localhost:8000/api/assign-mark/', {
+            student_id: student.id,
+            subject: formData.Subject,
+            assign_to: formData.AssignTo,
+            score: score,
+          });
+        }
       }
-      alert("All students have been saved successfully!");
+      alert('All marks assigned successfully!');
     } catch (error) {
-      console.error("Error updating students:", error);
+      console.error('Error assigning marks:', error);
     }
   };
+  
 
   return (
     <div className="container mt-4">
@@ -99,20 +105,7 @@ const AssignMarks = () => {
           <h2 className="mb-4">Apply Filter</h2>
           <form onSubmit={handleSubmit}>
             
-            {/* <div className="mb-3">
-              <label htmlFor="Year" className="form-label">
-                Year
-              </label>
-              <input
-                type="text"
-                className="form-control"
-                id="Year"
-                name="Year"
-                value={formData.Year}
-                onChange={handleChange}
-                required
-              />
-            </div> */}
+          
 
             <div className="mb-3">
               <label htmlFor="AssignTo" className="form-label">
