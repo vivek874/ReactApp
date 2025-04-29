@@ -5,6 +5,7 @@ interface MarkProp {
   Grade: string;
   Section: string;
   Subject: string;
+  DueDate: string;
 }
 
 interface Student {
@@ -26,6 +27,7 @@ const Homework = () => {
     Grade: "",
     Section: "",
     Subject: "",
+    DueDate: "",
   });
 
   const [students, setStudents] = useState<Student[]>([]);
@@ -34,10 +36,11 @@ const Homework = () => {
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
-    const { name, value } = e.target;
+    const { name, value,id } = e.target;
     setFormData((prevState) => ({
       ...prevState,
       [name]: value,
+      [id]:value,
     }));
   };
 
@@ -58,17 +61,22 @@ const Homework = () => {
 
   const handleSave = async () => {
     try {
-      for (const student of students) {
-        await axios.put(`http://localhost:8000/api/students/${student.id}/`, {
-          ...student,
-          homework_score: homeworkText, // Sending the same homework for all
-        });
-      }
-      alert("Homework assigned to all students successfully!");
+      await axios.post("http://127.0.0.1:8000/api/homework/", {
+        title: homeworkText,
+        grade: formData.Grade,    
+        section: formData.Section,   
+        subject: formData.Subject,    
+        due_date: formData.DueDate,   
+      });
+  
+      alert("Homework assigned successfully!");
+      setHomeworkText("");  // clear input after assigning
     } catch (error) {
-      console.error("Error assigning homework:", error);
+      console.error(error);
+      alert("Failed to assign homework. Please try again.");
     }
   };
+  
 
   return (
     <div className="container mt-4">
@@ -137,6 +145,23 @@ const Homework = () => {
               </select>
             </div>
 
+            {/* Due Date */}
+            <div className="mb-3">
+              <label htmlFor="DueDate" className="form-label">
+                Due Date
+              </label>
+              <input
+                type = "date"
+                id="DueDate"
+                className="form-control"
+                value={formData.DueDate}
+                onChange={handleChange}
+                required
+
+                />
+
+            </div>
+
             <button type="submit" className="btn btn-primary w-100">
               Go
             </button>
@@ -158,6 +183,7 @@ const Homework = () => {
               </div>
 
               <div>
+
                 <button
                   className="btn btn-success btn-lg w-100"
                   onClick={handleSave}
