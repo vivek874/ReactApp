@@ -17,10 +17,10 @@ interface Student {
   grade: number;
   section: string;
   attendance: number;
-  test_score: number;
-  homework_score: number;
-  final_score: number;
-  aggregate: number;
+  // test_score: number;
+  // homework_score: number;
+  // final_score: number;
+  final_aggregate: number;
 }
 
 const AssignMarks = () => {
