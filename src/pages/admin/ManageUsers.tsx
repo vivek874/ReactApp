@@ -36,6 +36,7 @@ const AdminManageUsers = () => {
         username,
         password,
         role,
+        
       });
 
       alert("User created successfully!");
@@ -63,46 +64,79 @@ const AdminManageUsers = () => {
   };
 
   return (
-    <div className="admin">
+    <div className="container mt-5">
+      <h2 className="text-center mb-4">User Management</h2>
+
       {/* User Creation Form */}
-      <div>
-        <h3>Create New User</h3>
-        <input
-          type="text"
-          placeholder="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-        <p></p>
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <p></p>
-        <select value={role} onChange={(e) => setRole(e.target.value)}>
-          <option value="">Select Role</option>
+      <div className="card mb-4">
+        <div className="card-body">
+          <h4 className="card-title mb-3">Create New User</h4>
+          <form>
+            <div className="mb-3">
+              <label className="form-label">Username</label>
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Enter username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+              />
+            </div>
 
-          <option value="teacher">Teacher</option>
-          <option value="student">Student</option>
-        </select>
-        <p></p>
-        <button onClick={handleCreateUser}>Create User</button>
-      </div>
-      <p></p>
+            <div className="mb-3">
+              <label className="form-label">Password</label>
+              <input
+                type="password"
+                className="form-control"
+                placeholder="Enter password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </div>
 
-      <h3>Existing Users</h3>
-      <ul>
-        {users.map((user) => (
-          <li key={user.username}>
-            {user.username} ({user.role})
-            <button onClick={() => handleDeleteUser(user.username)}>
-              Delete
+            <div className="mb-3">
+              <label className="form-label">Role</label>
+              <select
+                className="form-select"
+                value={role}
+                onChange={(e) => setRole(e.target.value)}
+              >
+                <option value="">Select Role</option>
+                <option value="teacher">Teacher</option>
+                <option value="student">Student</option>
+              </select>
+            </div>
+
+            <button
+              type="button"
+              className="btn btn-primary"
+              onClick={handleCreateUser}
+            >
+              Create User
             </button>
-          </li>
-        ))}
-      </ul>
+          </form>
+        </div>
+      </div>
+
+      {/* Existing Users */}
+      <div className="card">
+        <div className="card-body">
+          <h4 className="card-title mb-3">Existing Users</h4>
+          <ul className="list-group">
+            {users.map((user) => (
+              <li key={user.username} className="list-group-item d-flex justify-content-between align-items-center">
+                <span>{user.username} ({user.role})</span>
+                <button
+                  className="btn btn-sm btn-danger"
+                  onClick={() => handleDeleteUser(user.username)}
+                >
+                  Delete
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
     </div>
   );
 };

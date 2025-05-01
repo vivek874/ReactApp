@@ -11,11 +11,24 @@ const Academics = () => {
 
   return (
     <>
-      <ListGroup items={items} onSelectItem={setSelectedOption} />
-      <div className="content">
-        {selectedOption === "Assign Marks" && <AssignMarks />}
-        {selectedOption === "Assign Homework" && <Homework />}
-        {selectedOption === "Attendance" && <Attendance />}
+      <div className="container mt-4">
+        <div className="card p-3">
+          <ListGroup
+            items={items}
+            onSelectItem={setSelectedOption}
+          />
+          <div className="mt-3">
+            {selectedOption && (
+              <h4 className="text-secondary mb-3">{selectedOption}</h4>
+            )}
+            {!selectedOption && (
+              <div className="text-muted">Please select an option from the list.</div>
+            )}
+            {selectedOption === "Assign Marks" && <AssignMarks />}
+            {selectedOption === "Assign Homework" && <Homework />}
+            {selectedOption === "Attendance" && <Attendance />}
+          </div>
+        </div>
       </div>
     </>
   );
