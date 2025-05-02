@@ -47,10 +47,14 @@ const Homework = () => {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
+      const accessToken = localStorage.getItem("accessToken");
       const response = await axios.get(`http://localhost:8000/api/students/`, {
         params: {
           grade: formData.Grade,
           section: formData.Section,
+        },
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
         },
       });
       setStudents(response.data);
@@ -61,12 +65,18 @@ const Homework = () => {
 
   const handleSave = async () => {
     try {
+      const accessToken = localStorage.getItem("accessToken");
+
       await axios.post("http://127.0.0.1:8000/api/homework/", {
         title: homeworkText,
         grade: formData.Grade,    
         section: formData.Section,   
         subject: formData.Subject,    
         due_date: formData.DueDate,   
+      }, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
       });
   
       alert("Homework assigned successfully!");

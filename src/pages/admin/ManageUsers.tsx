@@ -16,8 +16,13 @@ const AdminManageUsers = () => {
 
   // Fetch users from backend
   const fetchUsers = async () => {
+    const token = localStorage.getItem("accessToken");
     try {
-      const response = await axios.get("http://127.0.0.1:8000/users/");
+      const response = await axios.get("http://127.0.0.1:8000/users/", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       setUsers(response.data);
     } catch (error) {
       console.error("Error fetching users:", error);
@@ -32,11 +37,16 @@ const AdminManageUsers = () => {
     }
 
     try {
+      const token = localStorage.getItem("accessToken");
       await axios.post("http://127.0.0.1:8000/register/", {
         username,
         password,
         role,
         
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
 
       alert("User created successfully!");
@@ -53,7 +63,12 @@ const AdminManageUsers = () => {
   const handleDeleteUser = async (username: string) => {
     if (window.confirm(`Are you sure you want to delete ${username}?`)) {
       try {
-        await axios.delete(`http://127.0.0.1:8000/delete-user/${username}/`);
+        const token = localStorage.getItem("accessToken");
+        await axios.delete(`http://127.0.0.1:8000/delete-user/${username}/`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         setUsers(users.filter((user) => user.username !== username)); // Update UI
         alert("User deleted successfully");
       } catch (error) {

@@ -46,11 +46,15 @@ const AssignMarks = () => {
     e.preventDefault();
 
     try {
+      const accessToken = localStorage.getItem("accessToken");
       const response = await axios.get(`http://localhost:8000/api/students/`, {
         params: {
           grade: formData.Grade,
           section: formData.Section,
           
+        },
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
         },
       });
       setStudents(response.data);
@@ -79,6 +83,7 @@ const AssignMarks = () => {
 
   const handleSave = async () => {
     try {
+      const accessToken = localStorage.getItem("accessToken");
       for (const student of students) {
         const score = student[formData.AssignTo as keyof Student];
   
@@ -88,6 +93,10 @@ const AssignMarks = () => {
             subject: formData.Subject,
             assign_to: formData.AssignTo,
             score: score,
+          }, {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
           });
         }
       }

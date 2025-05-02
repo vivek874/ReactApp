@@ -29,12 +29,16 @@ const ViewAttendance = () => {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const accessToken = localStorage.getItem("accessToken");
 
     try {
       const response = await axios.get("http://localhost:8000/api/students/", {
         params: {
           grade: formData.Grade,
           section: formData.Section,
+        },
+        headers: {
+          Authorization: `Bearer ${accessToken}`, // Add the token here
         },
       });
       setStudents(response.data);

@@ -40,11 +40,16 @@ const Attendance = () => {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const accessToken = localStorage.getItem("accessToken");
+
     try {
       const response = await axios.get(`http://localhost:8000/api/students/`, {
         params: {
           grade: formData.Grade,
           section: formData.Section,
+        },
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
         },
       });
       setStudents(response.data);
@@ -65,6 +70,8 @@ const Attendance = () => {
   };
 
   const handleSave = async () => {
+    const accessToken = localStorage.getItem("accessToken");
+
     try {
       for (const student of students) {
         const hasMarked = Object.prototype.hasOwnProperty.call(
@@ -76,9 +83,17 @@ const Attendance = () => {
 
         if (!hasMarked || (value !== 0 && value !== 1)) continue;
 
-        await axios.patch(`http://localhost:8000/api/students/${student.id}/`, {
-          add_attendance: value,
-        });
+        await axios.patch(
+          `http://localhost:8000/api/students/${student.id}/`,
+          {
+            add_attendance: value,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
       }
       alert("Attendance updated successfully!");
     } catch (error) {

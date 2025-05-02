@@ -10,6 +10,27 @@ const Login = () => {
   const [role, setRole] = useState("");
   const navigate = useNavigate();
 
+  const refreshAccessToken = async () => {
+    const refreshToken = localStorage.getItem("refreshToken");
+
+    if (!refreshToken) {
+      console.error("No refresh token available");
+      return null;
+    }
+
+    try {
+      const response = await axios.post("http://127.0.0.1:8000/api/token/refresh/", {
+        refresh: refreshToken,
+      });
+      const newAccessToken = response.data.access;
+      localStorage.setItem("accessToken", newAccessToken);
+      return newAccessToken;
+    } catch (error) {
+      console.error("Failed to refresh token:", error);
+      return null;
+    }
+  };
+
   const handleLogin = async () => {
     if (!role) {
       alert("Please select a role");
@@ -17,13 +38,26 @@ const Login = () => {
     }
 
     try {
-      const response = await axios.post("http://127.0.0.1:8000/login/", {
+      // Request token using JWT
+      const tokenResponse = await axios.post("http://127.0.0.1:8000/api/token/", {
         username,
         password,
-        role,
       });
 
-      if (response.data.username === username && response.data.role === role) {
+      const accessToken = tokenResponse.data.access;
+      const refreshToken = tokenResponse.data.refresh;
+
+      // Store both tokens in localStorage
+      localStorage.setItem("accessToken", accessToken);
+      localStorage.setItem("refreshToken", refreshToken);
+      console.log("Access Token:", accessToken); 
+
+      // Validate role
+      const userResponse = await axios.get("http://127.0.0.1:8000/api/user/", {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      });
+
+      if (userResponse.data.role === role) {
         auth?.login(role);
         navigate(
           role === "admin"
@@ -33,11 +67,17 @@ const Login = () => {
             : "/pages/home"
         );
       } else {
-        alert("Unauthorized user");
+        alert("Unauthorized role");
       }
     } catch (error) {
       console.error("Login error:", error);
-      alert("Invalid credentials");
+      const refreshedToken = await refreshAccessToken();
+      if (!refreshedToken) {
+        alert("Session expired. Please log in again.");
+        navigate("/login");  // Redirect to login page
+      } else {
+        alert("Failed to authenticate. Please try again.");
+      }
     }
   };
 
@@ -47,7 +87,6 @@ const Login = () => {
         <div className="center_login">
           <div className="mb-3">
             <h2 style={{ color: "white" }}>Login</h2>
-
             <input
               className="form-control"
               type="text"
