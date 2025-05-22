@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 interface Prediction {
   student_id: string;
   student_name: string;
-  predicted_aggregate: number;
+  [key: `predicted_${string}`]: number;
 }
 
 const AdminDashboard = () => {
@@ -11,10 +11,22 @@ const AdminDashboard = () => {
   const [grade, setGrade] = useState('');
   const [yField, setYField] = useState('');
   const [xFields, setXFields] = useState(['']);
+  const [academicYear, setAcademicYear] = useState('');
   const [predictions, setPredictions] = useState<Prediction[]>([]);
 
   const handlePredict = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (
+      !subject.trim() ||
+      !grade.trim() ||
+      !academicYear.trim() ||
+      !yField.trim() ||
+      xFields.filter(x => x.trim() !== '').length === 0
+    ) {
+      alert('Please fill in all fields before predicting.');
+      return;
+    }
 
     const token = localStorage.getItem("accessToken");
 
@@ -23,9 +35,11 @@ const AdminDashboard = () => {
       grade,
       y_field: yField,
       x_fields: xFields.filter(x => x.trim() !== ''),
+      academic_year: academicYear,
     };
 
     try {
+      console.log("📤 Sending predict request:", data);
       const response = await fetch('http://localhost:8000/predict/', {
         method: 'POST',
         headers: {
@@ -64,6 +78,18 @@ const AdminDashboard = () => {
               type="text"
               value={grade}
               onChange={e => setGrade(e.target.value)}
+              style={{ marginLeft: '5px' }}
+            />
+          </label>
+        </div>
+
+        <div style={{ marginBottom: '10px' }}>
+          <label>
+            Academic Year:
+            <input
+              type="text"
+              value={academicYear}
+              onChange={e => setAcademicYear(e.target.value)}
               style={{ marginLeft: '5px' }}
             />
           </label>
@@ -117,7 +143,7 @@ const AdminDashboard = () => {
         <button type="submit">Predict</button>
       </form>
 
-      {predictions.length > 0 && (
+      {Array.isArray(predictions) && predictions.length > 0 && (
         <div style={{ marginTop: '20px' }}>
           <h3>Predictions</h3>
           <table border={1} cellPadding={5} cellSpacing={0}>
@@ -133,7 +159,7 @@ const AdminDashboard = () => {
                 <tr key={index}>
                   <td>{pred.student_id}</td>
                   <td>{pred.student_name}</td>
-                  <td>{pred.predicted_aggregate}</td>
+                  <td>{pred[`predicted_${yField}`]}</td>
                 </tr>
               ))}
             </tbody>
