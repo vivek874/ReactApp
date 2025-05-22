@@ -7,6 +7,7 @@ interface MarkProp {
   Grade: string;
   Section: string;
   Subject: string;
+  AcademicYear: string;
 }
 
 interface Student {
@@ -30,6 +31,7 @@ const AssignMarks = () => {
     Grade: "",
     Section: "",
     Subject: "",
+    AcademicYear: "",
   });
 
   const handleChange = (
@@ -51,7 +53,7 @@ const AssignMarks = () => {
         params: {
           grade: formData.Grade,
           section: formData.Section,
-          
+          academic_year: formData.AcademicYear,
         },
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -132,6 +134,23 @@ const AssignMarks = () => {
                 <option value="test_score">Test Score</option>
                 <option value="homework_score">Homework</option>
                 <option value="final_exam">Final Exam</option>
+              </select>
+            </div>
+
+            <div className="mb-3">
+              <label htmlFor="AcademicYear" className="form-label">Academic Year</label>
+              <select
+                className="form-control"
+                id="AcademicYear"
+                name="AcademicYear"
+                value={formData.AcademicYear}
+                onChange={handleChange}
+                required
+              >
+                <option value="">-- Select Year --</option>
+                <option value="2023">2023</option>
+                <option value="2024">2024</option>
+                <option value="2025">2025</option>
               </select>
             </div>
 

@@ -1,122 +1,144 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
-type PerformanceEntry = {
-  [key: string]: string | number;
-};
+interface Prediction {
+  student_id: string;
+  student_name: string;
+  predicted_aggregate: number;
+}
 
 const AdminDashboard = () => {
-  const [performance, setPerformance] = useState<PerformanceEntry[] | null>(null);
-
   const [subject, setSubject] = useState('');
   const [grade, setGrade] = useState('');
-  const [section, setSection] = useState('');
-  const [xFields, setXFields] = useState(['attendance']);
-  const [yField, setYField] = useState('aggregate');
+  const [yField, setYField] = useState('');
+  const [xFields, setXFields] = useState(['']);
+  const [predictions, setPredictions] = useState<Prediction[]>([]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handlePredict = async (e: React.FormEvent) => {
     e.preventDefault();
-    const query = new URLSearchParams();
-    if (subject) query.append('subject_name', subject);
-    if (grade) query.append('grade', grade);
-    if (section) query.append('section', section);
-    if (xFields.length > 0) xFields.forEach(x => query.append('x_fields', x));
-    if (yField) query.append('y_field', yField);
 
     const token = localStorage.getItem("accessToken");
 
-    fetch(`http://localhost:8000/performance/?${query.toString()}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then(res => res.json())
-      .then(data => setPerformance(data.performance))
-      .catch(err => console.error(err));
+    const data = {
+      subject_name: subject,
+      grade,
+      y_field: yField,
+      x_fields: xFields.filter(x => x.trim() !== ''),
+    };
+
+    try {
+      const response = await fetch('http://localhost:8000/predict/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(data),
+      });
+      const result = await response.json();
+      setPredictions(result.predictions);
+    } catch (error) {
+      console.error('Error predicting:', error);
+    }
   };
-
-  useEffect(() => {
-    const token = localStorage.getItem("accessToken");
-
-    fetch('http://localhost:8000/performance/', {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then(res => res.json())
-      .then(data => setPerformance(data.performance))
-      .catch(err => console.error(err));
-  }, []);
 
   return (
     <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>
-      <h2 style={{ marginBottom: '20px' }}>Admin Dashboard</h2>
+      <h2>Admin Dashboard</h2>
+      <form onSubmit={handlePredict} style={{ marginTop: '20px' }}>
+        <div style={{ marginBottom: '10px' }}>
+          <label>
+            Subject Name:
+            <input
+              type="text"
+              value={subject}
+              onChange={e => setSubject(e.target.value)}
+              style={{ marginLeft: '5px' }}
+            />
+          </label>
+        </div>
 
-      <form onSubmit={handleSubmit} style={{ marginBottom: '20px' }}>
-        <label>
-          Subject Name:
-          <input type="text" value={subject} onChange={e => setSubject(e.target.value)} style={{ marginLeft: '5px', marginRight: '15px' }} />
-        </label>
-        <label>
-          Grade:
-          <input type="text" value={grade} onChange={e => setGrade(e.target.value)} style={{ marginLeft: '5px', marginRight: '15px' }} />
-        </label>
-        <label>
-          Section:
-          <input type="text" value={section} onChange={e => setSection(e.target.value)} style={{ marginLeft: '5px', marginRight: '15px' }} />
-        </label>
-        <label>
-          X Fields (comma-separated):
-          <input type="text" value={xFields.join(',')} onChange={e => setXFields(e.target.value.split(',').map(f => f.trim()))} style={{ marginLeft: '5px', marginRight: '15px' }} />
-        </label>
-        <label>
-          Y Field:
-          <input type="text" value={yField} onChange={e => setYField(e.target.value)} style={{ marginLeft: '5px', marginRight: '15px' }} />
-        </label>
-        <button type="submit">Update</button>
+        <div style={{ marginBottom: '10px' }}>
+          <label>
+            Grade:
+            <input
+              type="text"
+              value={grade}
+              onChange={e => setGrade(e.target.value)}
+              style={{ marginLeft: '5px' }}
+            />
+          </label>
+        </div>
+
+        <div style={{ marginBottom: '10px' }}>
+          <label>
+            Y Field:
+            <input
+              type="text"
+              value={yField}
+              onChange={e => setYField(e.target.value)}
+              style={{ marginLeft: '5px' }}
+            />
+          </label>
+        </div>
+
+        <div style={{ marginBottom: '10px' }}>
+          <label>X Fields:</label>
+          {xFields.map((field, index) => (
+            <div key={index} style={{ marginBottom: '5px' }}>
+              <input
+                type="text"
+                value={field}
+                onChange={e => {
+                  const newFields = [...xFields];
+                  newFields[index] = e.target.value;
+                  setXFields(newFields);
+                }}
+                style={{ marginRight: '10px' }}
+              />
+              <button
+                type="button"
+                onClick={() => {
+                  const newFields = xFields.filter((_, i) => i !== index);
+                  setXFields(newFields);
+                }}
+              >
+                Remove
+              </button>
+            </div>
+          ))}
+          <button
+            type="button"
+            onClick={() => setXFields([...xFields, ''])}
+          >
+            Add Field
+          </button>
+        </div>
+
+        <button type="submit">Predict</button>
       </form>
 
-      {performance ? (
-        <div>
-          <h3>Predicted Student Scores</h3>
-          <table style={{
-            width: '100%',
-            borderCollapse: 'collapse',
-            marginTop: '10px',
-            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)'
-          }}>
-            <thead style={{ backgroundColor: '#f2f2f2' }}>
+      {predictions.length > 0 && (
+        <div style={{ marginTop: '20px' }}>
+          <h3>Predictions</h3>
+          <table border={1} cellPadding={5} cellSpacing={0}>
+            <thead>
               <tr>
-                {performance.length > 0 &&
-                  Object.keys(performance[0]).map((key) => (
-                    <th key={key} style={{ padding: '10px', border: '1px solid #ddd' }}>
-                      {key.replace(/_/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase())}
-                    </th>
-                  ))}
+                <th>Student ID</th>
+                <th>Student Name</th>
+                <th>Predicted Aggregate</th>
               </tr>
             </thead>
             <tbody>
-              {performance.map((entry, index) => (
-                <tr
-                  key={index}
-                  style={{
-                    backgroundColor: index % 2 === 0 ? '#ffffff' : '#f9f9f9',
-                    transition: 'background-color 0.2s',
-                  }}
-                  onMouseOver={(e) => (e.currentTarget.style.backgroundColor = '#e6f7ff')}
-                  onMouseOut={(e) => (e.currentTarget.style.backgroundColor = index % 2 === 0 ? '#ffffff' : '#f9f9f9')}
-                >
-                  {Object.values(entry).map((value, i) => (
-                    <td key={i} style={{ padding: '10px', border: '1px solid #ddd' }}>
-                      {typeof value === 'number' ? value.toFixed(2) : value}
-                    </td>
-                  ))}
+              {predictions.map((pred, index) => (
+                <tr key={index}>
+                  <td>{pred.student_id}</td>
+                  <td>{pred.student_name}</td>
+                  <td>{pred.predicted_aggregate}</td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
-      ) : (
-        <p>Loading performance data...</p>
       )}
     </div>
   );

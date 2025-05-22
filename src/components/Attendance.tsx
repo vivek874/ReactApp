@@ -4,6 +4,7 @@ import axios from "axios";
 interface MarkProp {
   Grade: string;
   Section: string;
+  AcademicYear: string;
 }
 
 interface Student {
@@ -24,6 +25,7 @@ const Attendance = () => {
   const [formData, setFormData] = useState<MarkProp>({
     Grade: "",
     Section: "",
+    AcademicYear: "",
   });
 
   const [students, setStudents] = useState<Student[]>([]);
@@ -47,6 +49,7 @@ const Attendance = () => {
         params: {
           grade: formData.Grade,
           section: formData.Section,
+          academic_year: formData.AcademicYear,
         },
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -107,6 +110,26 @@ const Attendance = () => {
         <div className="col-md-10">
           <h2 className="mb-4">Apply Filter</h2>
           <form onSubmit={handleSubmit}>
+            {/* Academic Year */}
+            <div className="mb-3">
+              <label htmlFor="AcademicYear" className="form-label">
+                Academic Year
+              </label>
+              <select
+                className="form-control"
+                id="AcademicYear"
+                name="AcademicYear"
+                value={formData.AcademicYear}
+                onChange={handleChange}
+                required
+              >
+                <option value="">-- Select Academic Year --</option>
+
+                <option value="2024">2024</option>
+                <option value="2025">2025</option>
+              </select>
+            </div>
+
             {/* Grade */}
             <div className="mb-3">
               <label htmlFor="Grade" className="form-label">

@@ -18,6 +18,7 @@ interface Student {
 
 const ViewMarks = () => {
   const [formData, setFormData] = useState({
+    AcademicYear: "",
     Grade: "",
     Section: "",
     Subject: "",
@@ -43,6 +44,7 @@ const ViewMarks = () => {
     try {
       const response = await axios.get("http://localhost:8000/api/students/", {
         params: {
+          academic_year: formData.AcademicYear,
           grade: formData.Grade,
           section: formData.Section,
         },
@@ -62,6 +64,25 @@ const ViewMarks = () => {
         <div className="col-md-8">
           <h2 className="mb-4">Apply Filter</h2>
           <form onSubmit={handleSubmit}>
+            <div className="mb-3">
+              <label htmlFor="AcademicYear" className="form-label">
+                Academic Year
+              </label>
+              <select
+                className="form-control"
+                id="AcademicYear"
+                name="AcademicYear"
+                value={formData.AcademicYear}
+                onChange={handleChange}
+                required
+              >
+                <option value="">-- Select Academic Year --</option>
+                <option value="2024">2024</option>
+                <option value="2025">2025</option>
+           
+              </select>
+            </div>
+
             <div className="mb-3">
               <label htmlFor="Grade" className="form-label">
                 Grade

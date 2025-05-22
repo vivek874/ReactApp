@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import  { useState } from 'react'
 import ViewMarks from '../../components/ViewMarks';
 import ListGroup from '../../components/ListGroup';
 import ViewAttendance from '../../components/ViewAttendance';
