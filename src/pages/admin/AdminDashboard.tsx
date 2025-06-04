@@ -57,60 +57,129 @@ const AdminDashboard = () => {
 
   return (
     <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>
-      <h2>Admin Dashboard</h2>
-      <form onSubmit={handlePredict} style={{ marginTop: '20px' }}>
-        <div style={{ marginBottom: '10px' }}>
-          <label>
-            Subject Name:
-            <input
-              type="text"
-              value={subject}
-              onChange={e => setSubject(e.target.value)}
-              style={{ marginLeft: '5px' }}
-            />
-          </label>
-        </div>
+      <style>{`
+        .form-grid {
+          display: grid;
+          grid-template-columns: 1fr 2fr;
+          gap: 12px 20px;
+          align-items: center;
+          max-width: 600px;
+        }
+        .form-section {
+          margin-top: 20px;
+          margin-bottom: 20px;
+        }
+        label {
+          font-weight: 600;
+          text-align: right;
+          padding-right: 10px;
+          user-select: none;
+        }
+        input[type="text"] {
+          padding: 6px 8px;
+          font-size: 1rem;
+          border: 1px solid #ccc;
+          border-radius: 4px;
+          width: 100%;
+          box-sizing: border-box;
+        }
+        .xfields-container {
+          grid-column: 2 / 3;
+        }
+        .xfield-row {
+          display: flex;
+          align-items: center;
+          margin-bottom: 8px;
+        }
+        .xfield-row input[type="text"] {
+          flex-grow: 1;
+          margin-right: 10px;
+        }
+        button {
+          cursor: pointer;
+          padding: 6px 12px;
+          font-size: 1rem;
+          border-radius: 4px;
+          border: 1px solid #007BFF;
+          background-color: #007BFF;
+          color: white;
+          transition: background-color 0.2s ease;
+        }
+        button:hover {
+          background-color: #0056b3;
+          border-color: #0056b3;
+        }
+        .remove-btn {
+          background-color: #dc3545;
+          border-color: #dc3545;
+        }
+        .remove-btn:hover {
+          background-color: #a71d2a;
+          border-color: #a71d2a;
+        }
+        .add-btn {
+          margin-top: 5px;
+          background-color: #28a745;
+          border-color: #28a745;
+        }
+        .add-btn:hover {
+          background-color: #1e7e34;
+          border-color: #1e7e34;
+        }
+        table {
+          border-collapse: collapse;
+          width: 100%;
+          max-width: 800px;
+        }
+        th, td {
+          border: 1px solid #ccc;
+          padding: 8px 12px;
+          text-align: left;
+        }
+        th {
+          background-color: #f2f2f2;
+        }
+      `}</style>
+     
+      <form onSubmit={handlePredict} className="form-grid">
+        <h3 className="form-section" style={{ gridColumn: '1 / -1', marginBottom: '10px' }}>Prediction Parameters</h3>
 
-        <div style={{ marginBottom: '10px' }}>
-          <label>
-            Grade:
-            <input
-              type="text"
-              value={grade}
-              onChange={e => setGrade(e.target.value)}
-              style={{ marginLeft: '5px' }}
-            />
-          </label>
-        </div>
+        <label htmlFor="subject">Subject Name:</label>
+        <input
+          id="subject"
+          type="text"
+          value={subject}
+          onChange={e => setSubject(e.target.value)}
+        />
 
-        <div style={{ marginBottom: '10px' }}>
-          <label>
-            Academic Year:
-            <input
-              type="text"
-              value={academicYear}
-              onChange={e => setAcademicYear(e.target.value)}
-              style={{ marginLeft: '5px' }}
-            />
-          </label>
-        </div>
+        <label htmlFor="grade">Grade:</label>
+        <input
+          id="grade"
+          type="text"
+          value={grade}
+          onChange={e => setGrade(e.target.value)}
+        />
 
-        <div style={{ marginBottom: '10px' }}>
-          <label>
-            Y Field:
-            <input
-              type="text"
-              value={yField}
-              onChange={e => setYField(e.target.value)}
-              style={{ marginLeft: '5px' }}
-            />
-          </label>
-        </div>
+        <label htmlFor="academicYear">Academic Year:</label>
+        <input
+          id="academicYear"
+          type="text"
+          value={academicYear}
+          onChange={e => setAcademicYear(e.target.value)}
+        />
 
-        <div style={{ marginBottom: '10px' }}>
-          <label>X Fields:</label>
+        <label htmlFor="yField">Y Field:</label>
+        <input
+          id="yField"
+          type="text"
+          value={yField}
+          onChange={e => setYField(e.target.value)}
+        />
+
+        <label>X Fields:</label>
+        <div className="xfields-container">
           {xFields.map((field, index) => (
-            <div key={index} style={{ marginBottom: '5px' }}>
+            <div key={index} className="xfield-row">
               <input
                 type="text"
                 value={field}
@@ -119,14 +188,16 @@ const AdminDashboard = () => {
                   newFields[index] = e.target.value;
                   setXFields(newFields);
                 }}
-                style={{ marginRight: '10px' }}
+                aria-label={`X Field ${index + 1}`}
               />
               <button
                 type="button"
+                className="remove-btn"
                 onClick={() => {
                   const newFields = xFields.filter((_, i) => i !== index);
                   setXFields(newFields);
                 }}
+                aria-label={`Remove X Field ${index + 1}`}
               >
                 Remove
               </button>
@@ -134,19 +205,22 @@ const AdminDashboard = () => {
           ))}
           <button
             type="button"
+            className="add-btn"
             onClick={() => setXFields([...xFields, ''])}
           >
             Add Field
           </button>
         </div>
 
-        <button type="submit">Predict</button>
+        <div style={{ gridColumn: '1 / -1', marginTop: '20px' }}>
+          <button type="submit">Predict</button>
+        </div>
       </form>
 
       {Array.isArray(predictions) && predictions.length > 0 && (
-        <div style={{ marginTop: '20px' }}>
+        <div style={{ marginTop: '30px' }}>
           <h3>Predictions</h3>
-          <table border={1} cellPadding={5} cellSpacing={0}>
+          <table>
             <thead>
               <tr>
                 <th>Student ID</th>
