@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
-import { jwtDecode }from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
+
 interface JwtPayload {
   exp: number;
   iat?: number;
@@ -33,9 +34,12 @@ const Leaves = () => {
     }
 
     try {
-      const response = await axios.post("http://127.0.0.1:8000/api/token/refresh/", {
-        refresh: refreshToken,
-      });
+      const response = await axios.post(
+        "http://127.0.0.1:8000/api/token/refresh/",
+        {
+          refresh: refreshToken,
+        }
+      );
       const newAccessToken = response.data.access;
       localStorage.setItem("accessToken", newAccessToken);
       return newAccessToken;
@@ -69,9 +73,9 @@ const Leaves = () => {
     }
   }, []);
 
-    useEffect(() => {
-      fetchLeaves();
-    }, [fetchLeaves]);
+  useEffect(() => {
+    fetchLeaves();
+  }, [fetchLeaves]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -90,6 +94,7 @@ const Leaves = () => {
       await axios.post(
         "http://localhost:8000/api/leaves/",
         { message: leaveText },
+
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,

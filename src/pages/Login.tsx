@@ -7,7 +7,7 @@ const Login = () => {
   const auth = useContext(AuthContext);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [role, setRole] = useState("");
+  const [role, setRole] = useState("admin");
   const navigate = useNavigate();
 
   const refreshAccessToken = async () => {
@@ -58,7 +58,7 @@ const Login = () => {
       });
 
       if (userResponse.data.role === role) {
-        auth?.login(role);
+        auth?.login(role,username);
         navigate(
           role === "admin"
             ? "/admin/dashboard"
@@ -86,7 +86,7 @@ const Login = () => {
       <center>
         <div className="center_login">
           <div className="mb-3">
-            <h2 style={{ color: "white" }}>Login</h2>
+            <h2 style={{ color: "black" }}>Login</h2>
             <input
               className="form-control"
               type="text"

@@ -33,23 +33,21 @@
   color: #000; /* Set to black or any preferred color */
 }
 
-.image{
+.image {
   display: flex;
   justify-content: center;
-  align-items: flex-start;
-  padding-top: 150px; 
-  background-image: url('picture/wall.jpg');
-  background-size: cover;
-  background-position: center;
+  align-items: center;
+  background-color: rgba(213, 210, 210, 0.414);
   min-height: 100vh;
- 
-
+  padding: 40px;
+  flex-direction: column;
 }
 .center_login {
   width: 400px;
   padding: 30px;
   border-radius: 12px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  background-color:  white; /* Change this to any other desired color like #f0f0f0 */
 }
 
 .mb-3 {
