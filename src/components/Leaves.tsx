@@ -119,7 +119,7 @@ const Leaves = () => {
       <h5>Submit Leave Notice</h5>
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
-          <label htmlFor="leaveNotice" className="form-label"></label>
+         <br></br>
           <textarea
             id="leaveNotice"
             className="form-control"

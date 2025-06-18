@@ -6,17 +6,19 @@ import ViewAttendance from '../../components/ViewAttendance';
 
 
 interface Leave{
+  id: number;
   teacher: string;
   message: string;
   created_at: string;
+  status: string;
 }
 const Reports = () => {
-  const items=['View Marks','View Attendance','View Leaves'];
+  const items=['View Marks','View Attendance','View Leaves','Daily Routine'];
    const [selectedOption, setSelectedOption] = useState<string | null>(null);
 
    const [leaves , getLeaves] = useState<Leave[]>([]);
    
-   useEffect (()=>{
+   
     const accessToken = localStorage.getItem("accessToken")
 
     const fetchData = async () =>{
@@ -29,8 +31,47 @@ const Reports = () => {
       getLeaves(response.data)
 
     }
-    fetchData()
-   }, [selectedOption])
+
+    useEffect (()=>{
+      fetchData()
+    },[]);
+   
+
+
+   const handleStatusChange = async (id: number , status: string)=>{
+    try {
+      const accessToken = localStorage.getItem('accessToken')
+
+      await axios.patch(
+        `http://localhost:8000/api/leaves/${id}/update_status/`,
+        { status },
+        {
+          headers:{
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      fetchData()
+
+    }catch(err){
+      console.log({err})
+    }
+   }
+
+ 
+   const handleDeleteUser = async (id: number) =>{
+    await axios.delete(
+      `http://localhost:8000/api/leaves/${id}/`,{
+
+        headers:{
+          Authorization: `Bearer ${accessToken}`
+        }
+
+      }
+    );fetchData()
+   }
+   
+  
 
   return (
     <>
@@ -52,7 +93,7 @@ const Reports = () => {
 
             {
             selectedOption==="View Leaves" &&
-            <table className='table'>
+            <table className='table table-hover table-bordered table-striped'>
               <thead>
                 <tr>
                   <th>Name</th>
@@ -70,8 +111,15 @@ const Reports = () => {
                  <td>{leave.message}</td>
                  <td>{new Date(leave.created_at).toLocaleDateString()}</td>
                  <td>
-                   <button className="btn btn-sm btn-success me-2">Approve</button>
-                   <button className="btn btn-sm btn-danger">Decline</button>
+                  {leave.status=='approved' && <span className='text-success'>Approved</span>}
+                  {leave.status=='declined' && <span className='text-danger'>Declined</span>}
+                  { leave.status=='pending' &&
+                    <>
+                      <button className="btn btn-sm btn-success me-2" onClick={()=>handleStatusChange(leave.id, "approved")}>Approve</button>
+                      <button className="btn btn-sm btn-secondary"  onClick= {()=>handleStatusChange(leave.id, 'declined')}>Decline</button>
+                    </>
+                   }
+                   { <button className='btn btn-sm me-2' onClick={()=>handleDeleteUser(leave.id)}>Delete</button>}
                  </td>
                 </tr>
               ))
@@ -81,6 +129,14 @@ const Reports = () => {
             </table>
             
             
+            }
+            {selectedOption=='Daily Routine' &&
+                <form>
+                  <textarea>
+                    
+                  </textarea>
+
+                </form>
             }
           </div>
         </div>
