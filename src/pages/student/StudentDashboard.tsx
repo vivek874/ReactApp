@@ -12,6 +12,9 @@ interface Homework {
 
 const StudentDashboard = () => {
   const [homeworkList, setHomeworkList] = useState<Homework[]>([]);
+  const [routine, getRoutine] = useState<string | null>("");
+  const [grade, setGrade] = useState("");
+
   const [formData, setFormData] = useState({
     grade: "",
     section: "",
@@ -40,75 +43,116 @@ const StudentDashboard = () => {
     }
   };
 
-  return (
-    <div className="container mt-4">
-      <h2>Assigned Homework</h2>
+  const fetchRoutine = async () => {
+    // e.preventDefault()
+    const varRoutine = await axios.get(
+      `http://localhost:8000/api/daily_routines/?grade=${grade}`
+    );
+    getRoutine(varRoutine.data[0].routine);
+  };
 
-      <form onSubmit={handleSubmit} className="mb-4">
-        <div className="row g-3">
-          <div className="col-md-4">
-            <label className="form-label">Grade</label>
+  return (
+    <>
+      <div className="container mt-5">
+        <div className="card p-4 shadow-sm mb-5">
+          <h3 className="mb-4">Assigned Homework</h3>
+          <form onSubmit={handleSubmit} className="mb-4">
+            <div className="row g-3">
+              <div className="col-md-6">
+                <label className="form-label">Grade</label>
+                <input
+                  type="number"
+                  className="form-control"
+                  name="grade"
+                  value={formData.grade}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div className="col-md-6">
+                <label className="form-label">Section</label>
+                <select
+                  className="form-select"
+                  name="section"
+                  value={formData.section}
+                  onChange={handleChange}
+                  required
+                >
+                  <option value="">Select Section</option>
+                  <option value="A">A</option>
+                  <option value="B">B</option>
+                </select>
+              </div>
+            </div>
+            <button type="submit" className="btn btn-primary mt-4">
+              Filter
+            </button>
+          </form>
+
+          {homeworkList.length > 0 ? (
+            <table className="table table-striped table-bordered">
+              <thead>
+                <tr>
+                  <th>Title</th>
+                  <th>Subject</th>
+                  <th>Due Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                {homeworkList.map((homework) => {
+                  if (
+                    homework.grade === parseInt(formData.grade) &&
+                    homework.section === formData.section
+                  ) {
+                    return (
+                      <tr key={homework.id}>
+                        <td>{homework.title}</td>
+                        <td>{homework.subject}</td>
+                        <td>{homework.due_date}</td>
+                      </tr>
+                    );
+                  }
+                  return null;
+                })}
+              </tbody>
+            </table>
+          ) : (
+            <p className="text-muted mt-3">No homework assigned yet.</p>
+          )}
+        </div>
+
+        <div className="card p-4 shadow-sm">
+          <h3 className="mb-4">Daily Routine</h3>
+          <div className="mb-3">
+            <label htmlFor="routineGrade" className="form-label">
+              Grade
+            </label>
             <input
-              type="number"
+              id="routineGrade"
+              type="text"
+              placeholder="Enter grade"
+              value={grade}
+              onChange={(e) => setGrade(e.target.value)}
               className="form-control"
-              name="grade"
-              value={formData.grade}
-              onChange={handleChange}
-              required
             />
           </div>
-          <div className="col-md-4">
-            <label className="form-label">Section</label>
-            <select
-              className="form-control"
-              name="section"
-              value={formData.section}
-              onChange={handleChange}
-              required
-            >
-              <option value="">Select Section</option>
-              <option value="A">A</option>
-              <option value="B">B</option>
-            </select>
-          </div>
-         
-        </div>
-        <button type="submit" className="btn btn-primary mt-3">
-          Filter
-        </button>
-      </form>
+          <button onClick={fetchRoutine} className="btn btn-primary">
+            Go
+          </button>
 
-      {homeworkList.length > 0 ? (
-        <table className="table table-striped mt-3">
-          <thead>
-            <tr>
-              <th>Title</th>
-              <th>Subject</th>
-              <th>Due Date</th>
-            </tr>
-          </thead>
-          <tbody>
-          {homeworkList.map((homework) => {
-              if (
-                homework.grade === parseInt(formData.grade) &&
-                homework.section === formData.section
-              ) {
-                return (
-                  <tr key={homework.id}>
-                    <td>{homework.title}</td>
-                    <td>{homework.subject}</td>
-                    <td>{homework.due_date}</td>
-                  </tr>
-                );
-              }
-              return null;
-            })}
-          </tbody>
-        </table>
-      ) : (
-        <p className="text-muted mt-3">No homework assigned yet.</p>
-      )}
-    </div>
+          {routine && (
+            <div className="text-center">
+              <img
+                src={routine}
+                alt="Daily Routine"
+                className="img-fluid rounded shadow"
+                style={{ maxHeight: "500px", maxWidth: "100%" }}
+              />
+            </div>
+          )}
+        </div>
+      </div>
+    </>
   );
 };
 

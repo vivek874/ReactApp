@@ -37,10 +37,12 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: rgba(213, 210, 210, 0.414);
+  background: linear-gradient(135deg,  grey, #e0f7fa);
   min-height: 100vh;
-  padding: 40px;
+  padding: 60px 20px;
   flex-direction: column;
+  gap: 20px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
 }
 .center_login {
   width: 400px;
@@ -77,4 +79,40 @@ button.btn {
 }
 .admin{
   margin-left: 550px;
+}
+
+.logo{
+  width: 80px;
+  height: 80px;
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  
+}
+
+.login-title {
+  font-size: 28px;
+  font-weight: bold;
+  color: #333;
+  text-align: center;
+  margin-bottom: 20px;
+  font-family:  sans-serif;
+}
+
+.login-button {
+  background: linear-gradient(135deg, grey, grey);
+  color: #fff;
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: 500;
+  border-radius: 80px;
+  border: none;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+  width: 100%;
+}
+
+.login-button:hover {
+  background: linear-gradient(135deg, #0056b3, #004494);
+  transform: scale(1.03);
 }

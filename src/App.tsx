@@ -10,8 +10,7 @@ import Academics from "./pages/Academics";
 import Employee from "./pages/Employee";
 import StudentDashboard from "./pages/student/StudentDashboard";
 import "./App.css";
-import Courses from "./pages/student/Courses";
-import Profile from "./pages/student/Profile";
+
 
 
 function App() {
@@ -39,8 +38,7 @@ function App() {
 
                     {/* Student Routes */}
                     <Route path="/student/dashboard" element={<StudentDashboard />} />
-                    <Route path="/student/courses" element={<Courses/>} />
-                    <Route path="/student/profile" element={<Profile/>} />
+                  
                 </Routes>
             </Router>
         </AuthProvider>

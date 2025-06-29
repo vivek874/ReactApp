@@ -31,8 +31,7 @@ const Navbar = () => {
         ],
         student: [
             { label: "Dashboard", href: "/student/dashboard" },
-            { label: "Courses", href: "/student/courses" },
-            { label: "Profile", href: "/student/profile" },
+         
         ],
     };
 

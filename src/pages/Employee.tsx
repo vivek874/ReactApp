@@ -31,49 +31,49 @@ const Employee = () => {
       setLeaves(response.data)
     }
     getLeaves()
-  })
+  },[accessToken])
 
   return (
-    <div>
-    <h1 style={{ marginLeft:30 , fontFamily:'Arial'}}>Profile</h1>
-     
-    <strong style={{ marginLeft:30}}>Name : </strong> {user}<br></br>
-    <strong style={{ marginLeft:30}}>Role :</strong> {role}
-       
-       <table className='table-striped table-bordered table-hover table'>
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Leave</th>
-            <th>Created At</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          {
-            Array.isArray(leaves) && leaves.map ((leave , index)=>(
-              <tr key={index}>
-                <td>{leave.teacher}</td>
-                <td>{leave.message}</td>
-                <td>{new Date(leave.created_at).toLocaleDateString()}</td>
-                <td>
-                     {leave.status =='approved' && <span style={{color:'green'}}>Approved</span>}
-                     {leave.status == 'declined' && <span style={{color:'red'}}>Declined</span> }
-                     {leave.status == 'pending' && <span style={{color: ' black'}}> Pending</span>}
-                
-                </td>
-
+    <div className="container mt-5">
+      <div  className="card p-4 shadow-sm mb-5">
+        <h1 className="mb-4" style={{ fontFamily: 'sans-serif' }}>Leave History</h1>
+        
+        <p><strong>Name:</strong> {user}</p>
+        <p className="mb-4"><strong>Role:</strong> {role}</p>
+        
+        <div className="table-responsive">
+          <table className="table table-striped table-bordered table-hover">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Leave</th>
+                <th>Created At</th>
+                <th>Status</th>
               </tr>
-            ))
-          }
-          <tr>
-            <td></td>
-          </tr>
-        </tbody>
-       </table>
-
-
-    
+            </thead>
+            <tbody>
+              {
+                Array.isArray(leaves) && leaves.map ((leave , index)=>(
+                  <tr key={index}>
+                    <td>{leave.teacher}</td>
+                    <td>{leave.message}</td>
+                    <td>{new Date(leave.created_at).toLocaleDateString()}</td>
+                    <td>
+                         {leave.status =='approved' && <span style={{color:'green'}}>Approved</span>}
+                         {leave.status == 'declined' && <span style={{color:'red'}}>Declined</span> }
+                         {leave.status == 'pending' && <span style={{color: ' black'}}> Pending</span>}
+        
+                    </td>
+                  </tr>
+                ))
+              }
+              <tr>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   )
 }

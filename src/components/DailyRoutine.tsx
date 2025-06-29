@@ -1,54 +1,52 @@
-// import React from "react";
+import axios from "axios";
+import { useState } from "react";
 
 const DailyRoutine = () => {
+  const accessToken = localStorage.getItem("accessToken");
+  const [routine, getRoutine] = useState('');
+  const [grade, setGrade] = useState("");
+
+  const fetchData = async (e: React.FormEvent) => {
+    e.preventDefault()
+    const response = await axios.get(
+      `http://localhost:8000/api/daily_routines/?grade=${grade}`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+    getRoutine(response.data[0].routine);
+  };
   return (
     <div>
       <div className="container mt-4">
         <div className="row justify-content-center">
           <div className="col-md-10">
             <h2 className="mb-4">Apply Filter</h2>
-            <form >
+            <form onSubmit={fetchData}>
               {/* Grade */}
               <div className="mb-3">
                 <label htmlFor="Grade" className="form-label">
                   Grade
                 </label>
                 <input
-                  type="number"
+                  type="text"
                   className="form-control"
                   id="Grade"
                   name="Grade"
-                //   value={formData.Grade}
-                //   onChange={handleChange}
-                  min="1"
-                  max="10"
-                  required
+                  value={grade}
+                  onChange={(e) => setGrade(e.target.value)}
                 />
-              </div>
-
-              {/* Section */}
-              <div className="mb-3">
-                <label htmlFor="Section" className="form-label">
-                  Section
-                </label>
-                <select
-                  className="form-control"
-                  id="Section"
-                  name="Section"
-                //   value={formData.Section}
-                //   onChange={handleChange}
-                  required
-                >
-                  <option value="">-- Select Section --</option>
-                  <option value="A">A</option>
-                  <option value="B">B</option>
-                </select>
               </div>
 
               <button type="submit" className="btn btn-primary w-100">
                 Go
               </button>
             </form>
+            {routine &&
+            <img src={routine} alt="Routine" className="img-fluid mt-3"  />
+            }
           </div>
         </div>
       </div>
