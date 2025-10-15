@@ -11,10 +11,9 @@ const Login = () => {
   const [role, setRole] = useState("admin");
   const API_BASE = import.meta.env.VITE_API_URL;
 
-
   const navigate = useNavigate();
 
-   const refreshAccessToken = async () => {
+  const refreshAccessToken = async () => {
     const refreshToken = localStorage.getItem("refreshToken");
 
     if (!refreshToken) {
@@ -23,12 +22,9 @@ const Login = () => {
     }
 
     try {
-      const response = await axios.post(
-        `${API_BASE}/api/token/refresh/`,
-        {
-          refresh: refreshToken,
-        }
-      );
+      const response = await axios.post(`${API_BASE}/api/token/refresh/`, {
+        refresh: refreshToken,
+      });
       const newAccessToken = response.data.access;
       localStorage.setItem("accessToken", newAccessToken);
       return newAccessToken;
@@ -37,7 +33,7 @@ const Login = () => {
       return null;
     }
   };
-   const handleLogin = async () => {
+  const handleLogin = async () => {
     if (!role) {
       alert("Please select a role");
       return;
@@ -45,13 +41,10 @@ const Login = () => {
 
     try {
       // Request token using JWT
-      const tokenResponse = await axios.post(
-        `${API_BASE}/api/token/`,
-        {
-          username,
-          password,
-        }
-      );
+      const tokenResponse = await axios.post(`${API_BASE}/api/token/`, {
+        username,
+        password,
+      });
 
       const accessToken = tokenResponse.data.access;
       const refreshToken = tokenResponse.data.refresh;
@@ -83,15 +76,12 @@ const Login = () => {
       const refreshedToken = await refreshAccessToken();
       if (!refreshedToken) {
         alert("Session expired. Please log in again.");
-        navigate("/"); 
+        navigate("/");
       } else {
         alert("Failed to authenticate. Please try again.");
       }
     }
   };
- 
-
- 
 
   return (
     <div className="image">
@@ -130,13 +120,13 @@ const Login = () => {
               <option value="student">student</option>
             </select>
           </div>
-          <button className="login-button"  onClick={handleLogin}>
+          <button className="login-button" onClick={handleLogin}>
             Log in
           </button>
         </div>
       </center>
-      <div className="border rounded px-4 py-2 shadow-sm "> 
-        <p> (Admin) superadmin,  superadmin123</p>
+      <div className="border rounded px-4 py-2 shadow-sm ">
+        <p> (Admin) superadmin, superadmin123</p>
         <p> (Teacher) ram, ram123</p>
         <p> (Student) s1, sp1</p>
       </div>
