@@ -14,7 +14,7 @@ const AdminDashboard = () => {
   const [xFields, setXFields] = useState(['test_score']);
   const [academicYear, setAcademicYear] = useState('2025');
   const [predictions, setPredictions] = useState<Prediction[]>([]);
-  const API_BASE = process.env.REACT_APP_API_URL;
+  const API_BASE = process.env.VITE_API_URL;
 
   const handlePredict = async (e: React.FormEvent) => {
     e.preventDefault();

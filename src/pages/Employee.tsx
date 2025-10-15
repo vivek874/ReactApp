@@ -18,7 +18,7 @@ const Employee = () => {
 
  const [leaves, setLeaves] = useState<uniqueLeave[]>([])
  const accessToken = localStorage.getItem("accessToken")
- const API_BASE = process.env.REACT_APP_API_URL;
+ const API_BASE = process.env.VITE_API_URL;
 
   useEffect (()=>{
 

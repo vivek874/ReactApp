@@ -9,7 +9,8 @@ const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("admin");
-  const API_BASE = process.env.REACT_APP_API_URL;
+  const API_BASE = process.env.VITE_API_URL;
+
 
   const navigate = useNavigate();
    const handleLogin = async () => {
