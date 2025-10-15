@@ -29,7 +29,7 @@ const Homework = () => {
     Subject: "",
     DueDate: "",
   });
-
+  const API_BASE = import.meta.env.VITE_API_URL;
   const [students, setStudents] = useState<Student[]>([]);
   const [homeworkText, setHomeworkText] = useState<string>("");
 
@@ -48,7 +48,7 @@ const Homework = () => {
     e.preventDefault();
     try {
       const accessToken = localStorage.getItem("accessToken");
-      const response = await axios.get(`http://localhost:8000/api/students/`, {
+      const response = await axios.get(`${API_BASE}/api/students/`, {
         params: {
           grade: formData.Grade,
           section: formData.Section,
@@ -67,7 +67,7 @@ const Homework = () => {
     try {
       const accessToken = localStorage.getItem("accessToken");
 
-      await axios.post("http://127.0.0.1:8000/api/homework/", {
+      await axios.post(`${API_BASE}/api/homework/`, {
         title: homeworkText,
         grade: formData.Grade,    
         section: formData.Section,   

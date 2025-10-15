@@ -9,7 +9,7 @@ const AdminManageUsers = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("");
-  const API_BASE = process.env.VITE_API_URL;
+  const API_BASE = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     fetchUsers();

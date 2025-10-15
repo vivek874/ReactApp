@@ -23,6 +23,7 @@ const isTokenExpired = (token: string) => {
 
 const Leaves = () => {
   const [leaveText, setLeaveText] = useState("");
+  const API_BASE = import.meta.env.VITE_API_URL;
 
   // Function to refresh the access token using the refresh token
   const refreshAccessToken = async () => {
@@ -35,7 +36,7 @@ const Leaves = () => {
 
     try {
       const response = await axios.post(
-        "http://127.0.0.1:8000/api/token/refresh/",
+        `${API_BASE}/api/token/refresh/`,
         {
           refresh: refreshToken,
         }
@@ -61,7 +62,7 @@ const Leaves = () => {
     }
 
     try {
-      const response = await axios.get("http://localhost:8000/api/leaves/", {
+      const response = await axios.get(`${API_BASE}/api/leaves/`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -92,7 +93,7 @@ const Leaves = () => {
 
     try {
       await axios.post(
-        "http://localhost:8000/api/leaves/",
+        `${API_BASE}/api/leaves/`,
         { message: leaveText },
 
         {

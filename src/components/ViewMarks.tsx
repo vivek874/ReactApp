@@ -23,6 +23,7 @@ const ViewMarks = () => {
     Section: "",
     Subject: "",
   });
+  const API_BASE = import.meta.env.VITE_API_URL;
 
   const [students, setStudents] = useState<Student[]>([]);
 
@@ -42,7 +43,7 @@ const ViewMarks = () => {
     const accessToken = localStorage.getItem("accessToken");
 
     try {
-      const response = await axios.get("http://localhost:8000/api/students/", {
+      const response = await axios.get(`${API_BASE}/api/students/`, {
         params: {
           academic_year: formData.AcademicYear,
           grade: formData.Grade,

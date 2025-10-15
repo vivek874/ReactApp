@@ -9,7 +9,7 @@ const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("admin");
-  const API_BASE = process.env.VITE_API_URL;
+  const API_BASE = import.meta.env.VITE_API_URL;
 
 
   const navigate = useNavigate();
@@ -59,7 +59,7 @@ const Login = () => {
       const refreshedToken = await refreshAccessToken();
       if (!refreshedToken) {
         alert("Session expired. Please log in again.");
-        navigate("/login"); // Redirect to login page
+        window.location.href = "https://edumanagerx.vercel.app/";
       } else {
         alert("Failed to authenticate. Please try again.");
       }

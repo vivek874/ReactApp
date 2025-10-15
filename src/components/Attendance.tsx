@@ -27,7 +27,7 @@ const Attendance = () => {
     Section: "",
     AcademicYear: "",
   });
-
+  const API_BASE = import.meta.env.VITE_API_URL;
   const [students, setStudents] = useState<Student[]>([]);
 
   const handleChange = (
@@ -45,7 +45,7 @@ const Attendance = () => {
     const accessToken = localStorage.getItem("accessToken");
 
     try {
-      const response = await axios.get(`http://localhost:8000/api/students/`, {
+      const response = await axios.get(`${API_BASE}/api/students/`, {
         params: {
           grade: formData.Grade,
           section: formData.Section,
@@ -87,7 +87,7 @@ const Attendance = () => {
         if (!hasMarked || (value !== 0 && value !== 1)) continue;
 
         await axios.patch(
-          `http://localhost:8000/api/students/${student.id}/`,
+          `${API_BASE}/api/students/${student.id}/`,
           {
             add_attendance: value,
           },

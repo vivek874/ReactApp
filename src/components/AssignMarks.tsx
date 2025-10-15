@@ -33,6 +33,7 @@ const AssignMarks = () => {
     Subject: "",
     AcademicYear: "",
   });
+  const API_BASE = import.meta.env.VITE_API_URL;
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -49,7 +50,7 @@ const AssignMarks = () => {
 
     try {
       const accessToken = localStorage.getItem("accessToken");
-      const response = await axios.get(`http://localhost:8000/api/students/`, {
+      const response = await axios.get(`${API_BASE}/api/students/`, {
         params: {
           grade: formData.Grade,
           section: formData.Section,
@@ -90,7 +91,7 @@ const AssignMarks = () => {
         const score = student[formData.AssignTo as keyof Student];
   
         if (score !== undefined) {
-          await axios.post('http://localhost:8000/api/assign-mark/', {
+          await axios.post(`${API_BASE}/api/assign-mark/`, {
             student_id: student.id,
             subject: formData.Subject,
             assign_to: formData.AssignTo,
