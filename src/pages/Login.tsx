@@ -10,33 +10,9 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("admin");
   const API_BASE = process.env.REACT_APP_API_URL;
+
   const navigate = useNavigate();
-
-  const refreshAccessToken = async () => {
-    const refreshToken = localStorage.getItem("refreshToken");
-
-    if (!refreshToken) {
-      console.error("No refresh token available");
-      return null;
-    }
-
-    try {
-      const response = await axios.post(
-        `${API_BASE}/api/token/refresh/`,
-        {
-          refresh: refreshToken,
-        }
-      );
-      const newAccessToken = response.data.access;
-      localStorage.setItem("accessToken", newAccessToken);
-      return newAccessToken;
-    } catch (error) {
-      console.error("Failed to refresh token:", error);
-      return null;
-    }
-  };
-
-  const handleLogin = async () => {
+   const handleLogin = async () => {
     if (!role) {
       alert("Please select a role");
       return;
@@ -88,6 +64,31 @@ const Login = () => {
       }
     }
   };
+  const refreshAccessToken = async () => {
+    const refreshToken = localStorage.getItem("refreshToken");
+
+    if (!refreshToken) {
+      console.error("No refresh token available");
+      return null;
+    }
+
+    try {
+      const response = await axios.post(
+        `${API_BASE}/api/token/refresh/`,
+        {
+          refresh: refreshToken,
+        }
+      );
+      const newAccessToken = response.data.access;
+      localStorage.setItem("accessToken", newAccessToken);
+      return newAccessToken;
+    } catch (error) {
+      console.error("Failed to refresh token:", error);
+      return null;
+    }
+  };
+
+ 
 
   return (
     <div className="image">
