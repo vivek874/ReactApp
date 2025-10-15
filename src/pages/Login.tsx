@@ -13,6 +13,30 @@ const Login = () => {
 
 
   const navigate = useNavigate();
+
+   const refreshAccessToken = async () => {
+    const refreshToken = localStorage.getItem("refreshToken");
+
+    if (!refreshToken) {
+      console.error("No refresh token available");
+      return null;
+    }
+
+    try {
+      const response = await axios.post(
+        `${API_BASE}/api/token/refresh/`,
+        {
+          refresh: refreshToken,
+        }
+      );
+      const newAccessToken = response.data.access;
+      localStorage.setItem("accessToken", newAccessToken);
+      return newAccessToken;
+    } catch (error) {
+      console.error("Failed to refresh token:", error);
+      return null;
+    }
+  };
    const handleLogin = async () => {
     if (!role) {
       alert("Please select a role");
@@ -59,35 +83,13 @@ const Login = () => {
       const refreshedToken = await refreshAccessToken();
       if (!refreshedToken) {
         alert("Session expired. Please log in again.");
-        window.location.href = "https://edumanagerx.vercel.app/";
+        navigate("/"); 
       } else {
         alert("Failed to authenticate. Please try again.");
       }
     }
   };
-  const refreshAccessToken = async () => {
-    const refreshToken = localStorage.getItem("refreshToken");
-
-    if (!refreshToken) {
-      console.error("No refresh token available");
-      return null;
-    }
-
-    try {
-      const response = await axios.post(
-        `${API_BASE}/api/token/refresh/`,
-        {
-          refresh: refreshToken,
-        }
-      );
-      const newAccessToken = response.data.access;
-      localStorage.setItem("accessToken", newAccessToken);
-      return newAccessToken;
-    } catch (error) {
-      console.error("Failed to refresh token:", error);
-      return null;
-    }
-  };
+ 
 
  
 
