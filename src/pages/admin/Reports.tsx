@@ -29,7 +29,7 @@ const Reports = () => {
   const accessToken = localStorage.getItem("accessToken");
 
   const fetchData = async () => {
-    const response = await axios.get("http://localhost:8000/api/leaves/", {
+    const response = await axios.get(`${API_BASE}/api/leaves/`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
