@@ -18,11 +18,12 @@ const Employee = () => {
 
  const [leaves, setLeaves] = useState<uniqueLeave[]>([])
  const accessToken = localStorage.getItem("accessToken")
+ const API_BASE = process.env.REACT_APP_API_URL;
 
   useEffect (()=>{
 
     const getLeaves = async () =>{
-      const response = await axios.get("http://localhost:8000/api/leaves/",{
+      const response = await axios.get(`${API_BASE}/api/leaves/`,{
         headers: {
           Authorization: `Bearer ${accessToken}`
         }

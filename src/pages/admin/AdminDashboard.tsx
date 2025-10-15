@@ -14,6 +14,7 @@ const AdminDashboard = () => {
   const [xFields, setXFields] = useState(['test_score']);
   const [academicYear, setAcademicYear] = useState('2025');
   const [predictions, setPredictions] = useState<Prediction[]>([]);
+  const API_BASE = process.env.REACT_APP_API_URL;
 
   const handlePredict = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -41,7 +42,7 @@ const AdminDashboard = () => {
 
     try {
       console.log("Sending predict request:", data);
-      const response = await fetch('http://localhost:8000/predict/', {
+      const response = await fetch(`${API_BASE}/predict/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

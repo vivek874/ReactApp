@@ -9,6 +9,7 @@ const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("admin");
+  const API_BASE = process.env.REACT_APP_API_URL;
   const navigate = useNavigate();
 
   const refreshAccessToken = async () => {
@@ -21,7 +22,7 @@ const Login = () => {
 
     try {
       const response = await axios.post(
-        "http://127.0.0.1:8000/api/token/refresh/",
+        `${API_BASE}/api/token/refresh/`,
         {
           refresh: refreshToken,
         }
@@ -130,6 +131,11 @@ const Login = () => {
           </button>
         </div>
       </center>
+      <div className="border rounded px-4 py-2 shadow-sm "> 
+        <p> (Admin) superadmin,  superadmin123</p>
+        <p> (Teacher) Ram, ram123</p>
+        <p> (Student) s1, sp1</p>
+      </div>
     </div>
   );
 };

@@ -24,6 +24,7 @@ const Reports = () => {
   const [leaves, getLeaves] = useState<Leave[]>([]);
   const [file, setFile] = useState<File | null>(null);
   const [grade, setgrade] = useState<string>("");
+  const API_BASE = process.env.REACT_APP_API_URL;
 
   const accessToken = localStorage.getItem("accessToken");
 
@@ -46,7 +47,7 @@ const Reports = () => {
       const accessToken = localStorage.getItem("accessToken");
 
       await axios.patch(
-        `http://localhost:8000/api/leaves/${id}/update_status/`,
+        `${API_BASE}/api/leaves/${id}/update_status/`,
         { status },
         {
           headers: {
@@ -61,7 +62,7 @@ const Reports = () => {
   };
 
   const handleDeleteUser = async (id: number) => {
-    await axios.delete(`http://localhost:8000/api/leaves/${id}/`, {
+    await axios.delete(`${API_BASE}/api/leaves/${id}/`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
@@ -81,7 +82,7 @@ const Reports = () => {
     formData.append("grade", grade);
     formData.append("routine", file);
     try {
-      await axios.post("http://localhost:8000/api/daily_routines/", formData, {
+      await axios.post(`${API_BASE}/api/daily_routines/`, formData, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
           "Content-Type": "multipart/form-data",

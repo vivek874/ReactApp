@@ -9,6 +9,7 @@ const AdminManageUsers = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("");
+  const API_BASE = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
     fetchUsers();
@@ -18,7 +19,7 @@ const AdminManageUsers = () => {
   const fetchUsers = async () => {
     const token = localStorage.getItem("accessToken");
     try {
-      const response = await axios.get("http://127.0.0.1:8000/users/", {
+      const response = await axios.get(`${API_BASE}/users/`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -38,7 +39,7 @@ const AdminManageUsers = () => {
 
     try {
       const token = localStorage.getItem("accessToken");
-      await axios.post("http://127.0.0.1:8000/register/", {
+      await axios.post(`${API_BASE}/register/`, {
         username,
         password,
         role,
@@ -64,7 +65,7 @@ const AdminManageUsers = () => {
     if (window.confirm(`Are you sure you want to delete ${username}?`)) {
       try {
         const token = localStorage.getItem("accessToken");
-        await axios.delete(`http://127.0.0.1:8000/delete-user/${username}/`, {
+        await axios.delete(`${API_BASE}/delete-user/${username}/`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

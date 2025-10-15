@@ -14,6 +14,7 @@ const StudentDashboard = () => {
   const [homeworkList, setHomeworkList] = useState<Homework[]>([]);
   const [routine, getRoutine] = useState<string | null>("");
   const [grade, setGrade] = useState("");
+  const API_BASE = process.env.REACT_APP_API_URL;
 
   const [formData, setFormData] = useState({
     grade: "",
@@ -31,7 +32,7 @@ const StudentDashboard = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.get("http://localhost:8000/api/homework/", {
+      const response = await axios.get(`${API_BASE}/api/homework/`, {
         params: {
           grade: formData.grade,
           section: formData.section,
@@ -46,7 +47,7 @@ const StudentDashboard = () => {
   const fetchRoutine = async () => {
     // e.preventDefault()
     const varRoutine = await axios.get(
-      `http://localhost:8000/api/daily_routines/?grade=${grade}`
+      `${API_BASE}/api/daily_routines/?grade=${grade}`
     );
     getRoutine(varRoutine.data[0].routine);
   };
