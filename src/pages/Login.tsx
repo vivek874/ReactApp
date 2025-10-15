@@ -45,7 +45,7 @@ const Login = () => {
     try {
       // Request token using JWT
       const tokenResponse = await axios.post(
-        "http://127.0.0.1:8000/api/token/",
+        `${API_BASE}/api/token/`,
         {
           username,
           password,
@@ -61,7 +61,7 @@ const Login = () => {
       console.log("Access Token:", accessToken);
 
       // Validate role
-      const userResponse = await axios.get("http://127.0.0.1:8000/api/user/", {
+      const userResponse = await axios.get(`${API_BASE}/api/user/`, {
         headers: { Authorization: `Bearer ${accessToken}` },
       });
 
@@ -133,7 +133,7 @@ const Login = () => {
       </center>
       <div className="border rounded px-4 py-2 shadow-sm "> 
         <p> (Admin) superadmin,  superadmin123</p>
-        <p> (Teacher) Ram, ram123</p>
+        <p> (Teacher) ram, ram123</p>
         <p> (Student) s1, sp1</p>
       </div>
     </div>
