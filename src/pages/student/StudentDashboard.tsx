@@ -14,7 +14,7 @@ const StudentDashboard = () => {
   const [homeworkList, setHomeworkList] = useState<Homework[]>([]);
   const [routine, getRoutine] = useState<string | null>("");
   const [grade, setGrade] = useState("");
-  const API_BASE = import.meta.env.REACT_APP_API_URL;
+  const API_BASE = import.meta.env.VITE_API_URL;
 
   const [formData, setFormData] = useState({
     grade: "",

@@ -40,7 +40,6 @@ const Login = () => {
     }
 
     try {
-      // Request token using JWT
       const tokenResponse = await axios.post(`${API_BASE}/api/token/`, {
         username,
         password,
