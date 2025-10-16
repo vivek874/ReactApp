@@ -6,8 +6,8 @@ import logo from "../assets/logo.png";
 
 const Login = () => {
   const auth = useContext(AuthContext);
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState("superadmin");
+  const [password, setPassword] = useState("superadmin123");
   const [role, setRole] = useState("admin");
   const API_BASE = import.meta.env.VITE_API_URL;
 
