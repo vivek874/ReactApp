@@ -8,8 +8,8 @@ interface Prediction {
 }
 
 const AdminDashboard = () => {
-  const [subject, setSubject] = useState('');
-  const [grade, setGrade] = useState('');
+  const [subject, setSubject] = useState('Nepali');
+  const [grade, setGrade] = useState('1');
   const [yField, setYField] = useState('final_score');
   const [xFields, setXFields] = useState(['test_score']);
   const [academicYear, setAcademicYear] = useState('2025');
