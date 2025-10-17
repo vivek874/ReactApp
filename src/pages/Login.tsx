@@ -9,7 +9,7 @@ const Login = () => {
   const [username, setUsername] = useState("superadmin");
   const [password, setPassword] = useState("superadmin123");
   const [role, setRole] = useState("admin");
-  const [loading, setLoading] = useState(false);
+
   const API_BASE = import.meta.env.VITE_API_URL;
 
   const navigate = useNavigate();
@@ -40,7 +40,7 @@ const Login = () => {
       alert("Please select a role");
       return;
     }
-    setLoading(true);
+
     try {
       const tokenResponse = await axios.post(`${API_BASE}/api/token/`, {
         username,
@@ -71,7 +71,6 @@ const Login = () => {
         );
       } else {
         alert("Unauthorized role");
-        setLoading(false);
       }
     } catch (error) {
       console.error("Login error:", error);
@@ -127,11 +126,6 @@ const Login = () => {
           </button>
         </div>
       </center>
-      {loading && (
-        <div className="flex justify-center items-center mt-4">
-          <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-        </div>
-      )}
 
       <div className="border rounded px-4 py-2 shadow-sm ">
         <p> (Admin) superadmin, superadmin123</p>
