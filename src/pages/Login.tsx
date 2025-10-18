@@ -2,13 +2,14 @@ import { useContext, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import logo from "../assets/logo.png";
+import logo from "../assets/sms.jpg";
 
 const Login = () => {
   const auth = useContext(AuthContext);
   const [username, setUsername] = useState("superadmin");
   const [password, setPassword] = useState("superadmin123");
   const [role, setRole] = useState("admin");
+  const [loading, setLoading] = useState(false);
 
   const API_BASE = import.meta.env.VITE_API_URL;
 
@@ -40,7 +41,7 @@ const Login = () => {
       alert("Please select a role");
       return;
     }
-
+    setLoading(true);
     try {
       const tokenResponse = await axios.post(`${API_BASE}/api/token/`, {
         username,
@@ -69,6 +70,7 @@ const Login = () => {
             ? "/student/dashboard"
             : "/pages/home"
         );
+        setLoading(false);
       } else {
         alert("Unauthorized role");
       }
@@ -76,6 +78,7 @@ const Login = () => {
       console.error("Login error:", error);
       const refreshedToken = await refreshAccessToken();
       if (!refreshedToken) {
+        setLoading(false);
         alert("Session expired. Please log in again.");
         navigate("/");
       } else {
@@ -85,13 +88,14 @@ const Login = () => {
   };
 
   return (
-    <div className="image">
-      <img className="logo" src={logo} />
+    <div>
+      <div className="image">
+        <img className="logo" src={logo} />
 
-      <center>
         <div className="center_login">
-          <div className="mb-3 animate-spin">
+          <div className="mb-3">
             <h2 className="login-title">Login</h2>
+
             <input
               className="form-control"
               type="text"
@@ -121,16 +125,25 @@ const Login = () => {
               <option value="student">student</option>
             </select>
           </div>
+          {loading && (
+            <div
+              className="position-absolute top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center gap-2"
+              style={{ zIndex: 10, background: "rgba(255,255,255,0.6)" }}
+            >
+              <div className="spinner-border spinner-border-sm"></div>
+              Loading...
+            </div>
+          )}
+
           <button className="login-button" onClick={handleLogin}>
             Log in
           </button>
         </div>
-      </center>
-
-      <div className="border rounded px-4 py-2 shadow-sm ">
-        <p> (Admin) superadmin, superadmin123</p>
-        <p> (Teacher) ram, ram123</p>
-        <p> (Student) s1, sp1</p>
+        <div className="text-white">
+          <p> (Admin) superadmin, superadmin123</p>
+          <p> (Teacher) ram, ram123</p>
+          <p> (Student) s1, sp1</p>
+        </div>
       </div>
     </div>
   );
