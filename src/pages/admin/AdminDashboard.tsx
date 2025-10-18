@@ -124,7 +124,7 @@ const AdminDashboard = () => {
   
 
   return (
-    <div style={{ padding: '32px', fontFamily: 'Arial, sans-serif', background: '#f7f9fa', minHeight: '100vh' }}>
+    <div style={{ padding: '32px', fontFamily: 'Arial, sans-serif'}}>
       <style>{`
         .form-grid {
           display: grid;
@@ -311,7 +311,7 @@ const AdminDashboard = () => {
         }
       `}</style>
      
-      <form onSubmit={handlePredict} className="form-grid">
+      <form onSubmit={handlePredict} className="form-grid shadow ">
         <h3 className="form-section" style={{ gridColumn: '1 / -1', marginBottom: '10px' }}>Prediction Parameters</h3>
 
         <label htmlFor="subject">Subject Name:</label>
